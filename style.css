@@ -1,0 +1,838 @@
+/**
+Theme Name: Astra Child
+Author: Brainstorm Force
+Author URI: http://wpastra.com/about/
+Description: Astra is the fastest, fully customizable & beautiful theme suitable for blogs, personal portfolios and business websites. It is very lightweight (less than 50KB on frontend) and offers unparalleled speed. Built with SEO in mind, Astra comes with schema.org code integrated so search engines will love your site. Astra offers plenty of sidebar options and widget areas giving you a full control for customizations. Furthermore, we have included special features and templates so feel free to choose any of your favorite page builder plugin to create pages flexibly. Some of the other features: # WooCommerce Ready # Responsive # Compatible with major plugins # Translation Ready # Extendible with premium addons # Regularly updated # Designed, Developed, Maintained & Supported by Brainstorm Force. Looking for a perfect base theme? Look no further. Astra is fast, fully customizable and beautiful theme!
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: astra-child
+Template: astra
+*/
+
+/* aリンク */
+a:hover{
+	opacity: 0.8;
+	transition: all 0.8s;
+}
+
+/* 背景画像のリピート */
+@media (min-width: 1441px){
+	.repeat-bg{
+		margin: 0 calc(50% - 50vw);
+		width: 100vw !important;
+	}
+	.repeat-bg-oripa{
+        min-height: min(64.3vw, 926px);
+        background-size: auto;
+    }
+	.repeat-bg-trade{
+		min-height: min(103vw, 1182px);
+	}
+	.repeat-bg-top-oripa{
+		min-height: min(47vw, 680px);
+	}
+	.repeat-shop-news{
+		min-height: min(65vw, 930px);
+	}
+	footer>div{
+		margin: 0 calc(50% - 50vw) !important;
+		width: 100vw !important;
+	}
+}
+
+@media (min-width: 768px){
+	.product-top-oripa{
+		background-image: none !important;
+	}
+	.repeat-bg-oripa{
+		min-height: min(80vw, 864px);
+        background-position: 50% 50%;
+        background-size: contain;
+	}
+	.repeat-bg-trade{
+		min-height: min(103vw, 1182px);
+	}
+	.repeat-bg-top-oripa{
+		min-height: min(47vw, 680px);
+	}
+	.repeat-shop-news{
+		min-height: min(65vw, 930px);
+	}
+	footer>div{
+		min-height: min(40vw, 579px) !important;
+	}
+}
+
+.repeat-bg-oripa{
+	background-image: none;
+}
+
+footer>div{
+	min-height: min(60vw, 579px) !important;
+}
+
+/* リンク用オリジナルボタン */
+.link-btn{
+    position: relative;
+}
+
+.link-btn>img{
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.link-btn>a{
+    font-weight: bold;
+    color: #333;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* トップページのオリパ商品 */
+.product-top-oripa{
+	min-height:1.9vw;
+}
+@media (min-width: 768px){
+	.product-top-oripa img {
+		transition: transform .6s ease;
+	}
+	.product-top-oripa img:hover{
+		transform:scale(1.2)
+	}
+}
+
+/* SHOP NEWSの商品情報 */
+.shop-news-product ul{
+	margin: 0;
+	padding: 0;
+}
+.shop-news-product ul li{
+	flex: 1 0 100% !important;
+	max-width: 100% !important;
+}
+@media (min-width: 768px){
+	.shop-news-product{
+		background: none !important;
+	}
+	.shop-news-product ul li{
+		flex: 1 0 25% !important;
+		max-width: 25% !important;
+	}
+}
+
+/* モバイル表示でのpadding変更 */
+@media (max-width: 768px){
+	.ast-separate-container.ast-box-layout #content .ast-container{
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+/* トレカページ */
+/* タイトル */
+.head-container-toreka>.wp-block-uagb-advanced-heading{
+	width: fit-content !important;
+}
+
+/* 商品一覧 */
+.top-trade-products{
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr;
+	overflow: hidden !important;
+}
+
+.top-trade-product{
+	max-width: 100%;
+	max-height: 100%;
+	overflow: hidden !important;
+}
+
+@media (min-width: 768px){
+	.top-trade-products{
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+	}
+}
+
+.top-trade-product:hover{
+	opacity: 0.8;
+	transition: all 0.8s;
+}
+
+.top-trade-product .thumbnail{
+	margin-bottom: 10px;
+}
+
+.top-trade-product .thumbnail img{
+	display: block;
+	width: 100%;
+	margin: 0 auto;
+	aspect-ratio: 19/27;
+	object-fit: cover;
+}
+
+/* 品名と価格のエリア */
+.top-trade-product .product-detail{
+	border: 4px solid #05C9D6;
+	border-radius: 20px;
+	background-color: #002122;
+	padding: 1vw;
+}
+
+.top-trade-product p{
+	text-align: center;
+	color: #fff;
+	margin-bottom: 0;
+}
+
+.top-trade-product p.name{
+	font-size: 2.4vw;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-bottom: 0;
+}
+
+.top-trade-product p.price{
+	font-size: 4.2vw;
+}
+
+@media (min-width: 768px){
+	.top-trade-product .product-detail{
+		padding: 10px 5px;
+	}
+
+	.top-trade-product p.name{
+		font-size: 1.6vw;
+		margin-bottom: 5px;
+	}
+	
+	.top-trade-product p.price{
+		font-size: 2.8vw;
+	}
+}
+
+@media (min-width: 1441px){
+	.top-trade-product p.name{
+		font-size: 16px;
+	}
+	
+	.top-trade-product p.price{
+		font-size: 28px;
+	}
+}
+
+.slide-in {
+	opacity: 0;
+	transform: translate(0,0);
+	transition: all 1.0s;
+	transform: translate(100%,0);
+}
+
+.scroll-in{
+	transform: translate(0, 0)!important;
+	opacity: 1!important;
+}
+
+.top-trade-products ul{
+	margin: 0;
+	padding: 0;
+}
+.top-trade-products ul li{
+	border-bottom: none;
+	margin-bottom: 0 !important;
+}
+
+.top-trade-products-sp ul.wc-block-grid__products{
+	display: flex !important;
+}
+
+.top-trade-products-sp ul li{
+	flex: 1 0 33.3333333333% !important;
+	max-width: 33.3333333333% !important;
+}
+
+/* もっと見るボタン */
+.more-btn p{
+	margin-bottom: 0;
+	position: relative;
+}
+
+.more-btn,
+.more-btn p{
+	min-height:min(11vw, 76px) !important;
+}
+
+.more-btn p{
+	line-height:min(11vw, 76px);
+}
+
+.more-btn::before,
+.more-btn::after{
+	content:'';
+	position:absolute;
+	display: inline-block;
+	width: 12.2vw;
+	height: 15.4vw;
+	background-size: contain;
+  	vertical-align: middle;
+}
+
+.more-btn::before{
+	background-image:url(https://tglobal.sakura.ne.jp/tglobal/wp-content/themes/astra-child/assets/img/btn-left.png);
+	left: -14vw;
+}
+
+.more-btn::after{
+	background-image:url(https://tglobal.sakura.ne.jp/tglobal/wp-content/themes/astra-child/assets/img/btn-right.png);
+	right: -14vw;
+}
+
+.more-btn a{
+	display: block;
+}
+
+@media (min-width: 768px){
+	.more-btn::before,
+	.more-btn::after{
+		width: 115px;
+		height: 143.5px;
+	}
+	.more-btn::before{
+		left: -130px;
+	}
+	.more-btn::after{
+		right: -130px;
+	}
+}
+
+/* カテゴリリスト */
+.product-categories-list{
+	background-color: #000C0DE5;
+	border: 4px solid #05C9D6;
+	border-radius: 20px;
+	padding: 30px 10px;
+}
+
+.product-categories-list ul{
+	list-style-type: none;
+	padding: 0;
+}
+
+.product-categories-list p,
+.product-categories-list ul li a{
+	color: #fff;
+}
+
+.product-categories-list p{
+	font-size: 20px;
+	padding: 5px 0 5px 10px;
+	border-left: 10px solid #05C9D6;
+}
+
+.product-categories-list ul li{
+	margin-bottom: 10px;
+}
+
+.product-categories-list ul li a{
+	display: block;
+}
+
+/* バナー横の背景色 */
+@media (min-width: 1440px){
+	.bg-color-all{
+		margin-left: calc(-50vw + 720px) !important;
+    	margin-right: calc(-50vw + 720px) !important;
+	}
+}
+
+
+/* トレカページここまで */
+
+/* お問い合わせページ */
+.btn{
+	display: inline-block;
+	text-decoration: none;
+	color: #9B70AE;
+}
+
+.btn:hover{
+	cursor: pointer;
+	transition: all 0.8s;
+}
+
+/* フッターメニュー */
+footer h2.widgettitle,
+footer p,
+footer a{
+	color: #fff;
+}
+
+.footer-cat ul,
+.footer-menu ul{
+	list-style: none;
+}
+
+.footer-cat ul{
+	display: flex;
+	justify-content: left;
+	column-gap: 5%;
+}
+
+.footer-cat ul li{
+	display: inline-block;
+}
+
+footer a{
+	font-size: 1rem;
+}
+
+.footer-menu li{
+	margin-bottom:15px;
+}
+
+@media (min-width: 768px){
+	.footer-cat ul{
+		justify-content: right;
+	}
+}
+
+/* リンクの下線 */
+.ast-single-post .entry-content a{
+	text-decoration: none;
+}
+
+/* ボタンの設定 */
+.shop-button{
+	display: inline-block;
+	width: 40vw !important;
+	height: 12vw;
+	background-size: cover;
+}
+.shop-button a{
+	display: block;
+	text-align: center;
+	line-height: 12vw;
+	font-size: 2.2vw;
+	font-weight: bold;
+	color:#333;
+}
+.shop-button:hover{
+	opacity: 0.92;
+	transition: all 0.5s;
+}
+
+@media (min-width: 768px){
+	.shop-button{
+		width: 282px !important;
+		height: 90px;
+	}
+	.shop-button a{
+		line-height: 90px;
+		font-size: 20px;
+	}
+}
+
+/* トレカページの「もっと見る」ボタン */
+.toreka-button{
+	width: 100%;
+	height: 10.5vw;
+}
+.toreka-button a{
+	display: block;
+	text-align: center;
+	font-size: 3.2vw;
+	line-height: 10.5vw;
+	font-weight: bold;
+	color: #333;
+}
+.toreka-button:hover{
+	opacity: 0.92;
+	transition: all 0.5s;
+}
+
+@media (min-width: 768px){
+	.toreka-button{
+		height: 114px;
+	}
+	.toreka-button a{
+		line-height: 114px;
+		font-size: 26px;
+	}
+}
+
+/* オリパページ */
+.oripa-container{
+	display: block;
+}
+
+@media (min-width: 768px){
+	.oripa-container{
+		display: grid;
+		grid-template-columns: repeat(2, auto);
+        column-gap: 15px;
+        padding: 2.78% 1.39%;
+        background-image: url('https://t-card.shop/wp-content/uploads/oripa-bg-2.jpg');
+	}
+
+	.oripa-container>.oripa-item:first-child{
+		justify-self: end;
+	}
+}
+
+@media (min-width: 1441px){
+	.oripa-container{
+        padding: 40px 20px;
+	}
+}
+
+/* オリパページの各アイテム */
+.oripa-item{
+	width: 100%;
+    background-image: url('https://t-card.shop/wp-content/uploads/oripa-bg-2.jpg');
+    background-position: 50% 50%;
+    padding: 10% 5%;
+}
+
+@media (min-width: 768px){
+	.oripa-item{
+		max-width: 516px;
+        background-image: none;
+        padding-bottom: 0;
+	}
+}
+
+@media (min-width: 1441px){
+	.oripa-item{
+		width: 516px;
+	}
+}
+
+.oripa-item-overview{
+	border: 5px solid #fff;
+	margin-bottom: 12%;
+}
+
+.oripa-item-top,
+.oripa-item-bottom{
+	padding-left: 5%;
+	padding-right: 5%;
+}
+
+.oripa-item-img img{
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.oripa-item-num{
+	background-color: #797979;
+	text-align: right;
+	position: relative;
+    height: 46px;
+}
+
+.oripa-item-num-current{
+	position: absolute;
+	height: 100%;
+    right: 0;
+    top: 0;
+}
+
+.oripa-item-num-current{
+	background-color: #FF8FF4;
+	z-index: 10;
+}
+
+.oripa-item-num-text{
+    position: relative;
+	color: #fff;
+    z-index: 11;
+    font-size: 2.7vw;
+    top: 7px;
+    font-weight: bold;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+@media (min-width: 768px){
+    .oripa-item-num-text{
+        font-size: min(32px, 2.7vw);
+    }
+}
+
+@media (min-width: 1441px){
+    .oripa-item-num-text{
+        font-size: 32px;
+    }
+}
+
+.oripa-item-divide{
+    background: linear-gradient(-45deg, rgba(246, 255, 0, 1), rgba(255, 0, 161, 1));
+    height: 20px;
+}
+
+.oripa-item-bottom{
+	display: grid;
+	grid-template-columns: 62% 38%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+@media (min-width: 1441px){
+    .oripa-item-bottom{
+        grid-template-columns: 284px 1fr;
+    }
+}
+
+.oripa-slot-btns{
+    display: grid;
+    grid-template-rows: repeat(2, auto);
+    align-items: center;
+    row-gap: 2%;
+}
+
+@media (min-width: 768px){
+    .oripa-slot-btns{
+        row-gap: 5px;
+    }
+    
+    .oripa-item-bottom{
+        grid-template-rows: repeat(7.5vw, auto);
+    }
+}
+
+@media (min-width: 1441px){.oripa-item-bottom{
+        grid-template-rows: repeat(89px, auto);
+    }
+}
+
+/* スロットボタン */
+.oripa-slot-btn>a{
+    font-size: 4vw;
+}
+
+@media (min-width: 768px){
+    .oripa-slot-btn>a{
+        font-size: min(24px, 2vw);
+    }
+}
+
+@media (min-width: 1441px){
+    .oripa-slot-btn>a{
+        font-size: 24px;
+    }
+}
+
+.oripa-img img {
+    max-width: 100%; /* 画像が親要素を超えないようにする */
+    height: auto; /* アスペクト比を維持しつつ高さを自動調整 */
+}
+
+/* 当たり一覧ボタン */
+.oripa-item-hit{
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.oripa-item-hit>a{
+    font-size: 24px;
+}
+
+@media (min-width: 768px){
+    .oripa-item-hit>a{
+        font-size: min(24px, 2.7vw);
+    }
+}
+
+@media (min-width: 1441px){
+    .oripa-item-hit>a{
+        font-size: 24px;
+    }
+}
+
+.btn.btn-primary{
+	color: #333;
+}
+
+/* 決済ページ */
+.woocommerce-js input[type=number]{
+	max-width: 200px;
+}
+
+#mycred-partial-payment-total>p{
+    display: none;
+}
+
+/* ポイント購入ページ */
+.page-container{
+	margin: 0 auto;
+}
+
+.point-page-container{
+	padding: 60px 20px;
+	background-image: url('https://t-card.shop/wp-content/uploads/purchase-bg-1.jpg');
+	background-position: 50% 50%;
+}
+
+.point-page{
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+.point-page-container p,
+.point-page-container a{
+    line-height: 1.5;
+}
+
+.point-block-container{
+    padding: 20px 30px;
+    margin-bottom: 30px;
+    background-color: #fff;
+    border-radius: 40px;
+}
+
+.point-purchase-title{
+    display: grid;
+    grid-template-rows: repeat(2, auto);
+}
+
+.point-purchase-title>p{
+    font-size: min(40px, 7.5vw);
+    font-weight: bold;
+    border-bottom: 1px solid #333;
+}
+
+.point-balance{
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+}
+
+.point-balance>p{
+    font-size: min(32px, 6vw);
+    margin-bottom: 0;
+}
+
+@media (min-width: 768px){
+    .point-purchase-title>p{
+        font-size: 40px;
+    }
+    .point-balance>p{
+        font-size: 32px;
+    }
+}
+
+.point-balance>p:last-child{
+    text-align: right;
+}
+
+.point-purchase{
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: repeat(2, auto);
+    gap: 5%;
+}
+
+@media (min-width: 768px){
+    .point-purchase{
+        grid-template-columns: 100px 1fr auto;
+    }
+}
+
+.purchase-img{
+    display: flex;
+	align-items: center;
+	justify-content: center;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    max-width: 100px;
+    justify-self: end;
+}
+
+.purchase-img>img{
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.purchase-rate{
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    justify-content: right;
+    display: inline-block;
+}
+
+.purchase-rate>p{
+    line-height: 1.2;
+    margin-bottom: 0;
+}
+
+.purchase-rate>p:first-child{
+    font-size: 9vw;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.purchase-rate>p:last-child{
+    font-size: 6.75vw;
+}
+
+.purchase-button{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+    padding-top: 5%;
+}
+
+.purchase-button a{
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 6.75vw;
+    font-weight: bold;
+    color: #fff;
+    background-color: #333;
+    border-radius: 20px;
+    text-decoration: none;
+}
+
+@media (min-width: 768px){
+    .purchase-img{
+        justify-self: center;
+    }
+    .purchase-rate>p:first-child{
+        font-size: 48px;
+    }
+    
+    .purchase-rate>p:last-child{
+        font-size: 36px;
+    }
+    .purchase-button{
+        grid-column: 3 / 4;
+        grid-row: 1 / 2;
+        padding-top: 0;
+        justify-content: right;
+    }
+    .purchase-button a{
+        font-size: 36px;
+    }
+}
+
+/* アカウントページ */
+.ast-wooaccount-user-wrapper{
+    display: none;
+}

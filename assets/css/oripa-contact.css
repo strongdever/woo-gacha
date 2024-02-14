@@ -1,0 +1,546 @@
+main {
+	width: 100% !important;
+}
+
+.main-form .form-wrapper {
+	width: 100%;
+	padding: 4.4rem 3.6rem;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	-webkit-row-gap: 1.2rem;
+	-moz-row-gap: 1.2rem;
+	row-gap: 1.2rem;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	border-radius: 6px;
+	background: #FFF;
+	box-shadow: 0px 0px 6px 4px rgba(210, 210, 210, 0.25);
+	margin: 5.2rem auto;
+	max-width: 56rem;
+}
+
+.main-form .form-wrapper .validate {
+	display: none;
+}
+
+.main-form .form-wrapper .input-item {
+	-webkit-row-gap: 0.2rem;
+	-moz-row-gap: 0.2rem;
+	row-gap: 0.2rem;
+}
+
+.main-form .form-wrapper .input-button {
+	column-gap: 0.6rem;
+}
+
+@media only screen and (max-width: 767px) {
+	.main-form .form-wrapper .input-button.horizontal-wrapper {
+		flex-direction: column;
+		row-gap: 0.4rem;
+	}
+}
+
+.mw_wp_form {
+	width: 100% !important;
+}
+
+.mw_wp_form_confirm .form-wrapper .name-wrapper .input-item {
+	-webkit-row-gap: 0.6rem;
+	-moz-row-gap: 0.6rem;
+	row-gap: 0.6rem;
+	width: -webkit-fit-content;
+	width: -moz-fit-content;
+	width: fit-content;
+}
+
+.mw_wp_form_confirm .form-wrapper .name-wrapper .horizontal-wrapper {
+	-webkit-box-pack: flex-start;
+	-ms-flex-pack: flex-start;
+	justify-content: flex-start;
+}
+
+@media only screen and (max-width: 767px) {
+	.main-form .form-wrapper {
+		width: 90%;
+		margin: 4.4rem auto;
+		-webkit-row-gap: 1.2rem;
+		-moz-row-gap: 1.2rem;
+		row-gap: 1.2rem;
+		padding: 0;
+		border: unset;
+		box-shadow: unset;
+	}
+
+	.main-form .form-wrapper .input-item {
+		-webkit-row-gap: 0.4rem;
+		-moz-row-gap: 0.4rem;
+		row-gap: 0.4rem;
+	}
+
+	.main-form .form-wrapper .horizontal-wrapper {
+		-webkit-column-gap: 0.8rem;
+		-moz-column-gap: 0.8rem;
+		column-gap: 0.8rem;
+	}
+}
+
+.main-form .form-wrapper .card-list-wrapper {
+	width: 100%;
+	margin: 1.6rem 0 0 0;
+	list-style: none;
+	margin-bottom: 1.2rem;
+}
+
+.main-form .form-wrapper .card-list-wrapper .head-label {
+	font-size: 1.2rem;
+	font-weight: 700;
+	margin-bottom: 1.2rem;
+}
+
+.main-form .form-wrapper .card-list-wrapper .ncard-wrapper {
+	display: flex;
+	column-gap: 2.4rem;
+	margin-bottom: 0.6rem;
+	font-weight: 700;
+}
+
+.main-form .form-wrapper .card-list-wrapper .card-list {
+	position: relative;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	row-gap: 0.6rem;
+	list-style: none;
+	margin: 0;
+}
+
+.main-form .form-wrapper .card-list-wrapper .card-list .card-item {
+	width: 100%;
+	position: relative;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	column-gap: 1.2rem;
+}
+
+.main-form .form-wrapper .card-list-wrapper .card-list .card-item .price {
+	width: 16%;
+	flex-shrink: 0;
+	text-align: right;
+}
+
+.main-form input,
+.main-form select {
+	height: 3.2rem !important;
+	border-radius: 4px;
+	border: 1px solid #cdcdcd !important;
+	background-color: rgba(0, 153, 189, 0.08);
+	padding: 1.1rem !important;
+	color: #333;
+	font-weight: 500;
+}
+
+.main-form li textarea.desc {
+	border-radius: 4px;
+	border: 1px solid #D2D2D2 !important;
+	background-color: rgba(0, 153, 189, 0.08);
+	padding: 1.1rem !important;
+	line-height: 22px !important;
+}
+
+.main-form .desc.heading .red-color {
+	color: #F04B4B;
+}
+
+.main-form li .error {
+	color: #F24040;
+	display: block;
+}
+
+.main-form .vertical-wrapper {
+	width: 100%;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	margin: 0;
+	row-gap: 0.8rem;
+}
+
+.main-form .input-privacy .vertical-wrapper {
+	width: -webkit-fit-content;
+	width: -moz-fit-content;
+	width: fit-content;
+	position: relative;
+}
+
+.main-form .input-privacy.horizontal-wrapper {
+	-webkit-box-align: start !important;
+	-ms-flex-align: start !important;
+	align-items: flex-start !important;
+}
+
+.main-form .checkbox-item {
+	-webkit-row-gap: 2.4rem;
+	-moz-row-gap: 2.4rem;
+	row-gap: 2.4rem;
+}
+
+@media only screen and (max-width:767px) {
+	-webkit-row-gap: 1.5rem;
+	-moz-row-gap: 1.5rem;
+	row-gap: 1.5rem;
+}
+
+.main-form .horizontal-wrapper {
+	width: 100%;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: row;
+	flex-direction: row;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-column-gap: 1.6rem;
+	-moz-column-gap: 1.6rem;
+	column-gap: 1.6rem;
+}
+
+.mw_wp_form_confirm .name-wrapper .horizontal-wrapper {
+	-webkit-column-gap: 0.8rem;
+	-moz-column-gap: 0.8rem;
+	column-gap: 0.8rem;
+}
+
+@media only screen and (max-width: 767px) {
+	.main-form .horizontal-wrapper.pc-only {
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		-webkit-row-gap: 2.4rem;
+		-moz-row-gap: 2.4rem;
+		row-gap: 2.4rem;
+	}
+}
+
+.main-form label {
+	color: #333;
+}
+
+.main-form label.required {
+	position: relative;
+	width: -webkit-fit-content;
+	width: -moz-fit-content;
+	width: fit-content;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	column-gap: 0.4rem;
+}
+
+.main-form label.required::after {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	content: '必須';
+	padding: 0.1rem 0.3rem 0.1rem 0.3rem;
+	width: fit-content;
+	height: 1.2rem;
+	background: #F24040;
+	border-radius: 4px;
+	color: #FFF;
+	text-align: center;
+	font-size: 0.7rem;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 100%;
+	letter-spacing: 1.3px;
+}
+
+@media only screen and (max-width: 767px) {
+	.main-form label.required::after {
+		padding: 0.5rem;
+	}
+}
+
+.main-form-thanks {
+	padding-top: 6.4rem;
+	padding-bottom: 6.4rem;
+}
+
+.main-form-thanks .thanks-head {
+	font-size: 1.4rem !important;
+	font-weight: 700 !important;
+	text-align: center !important;
+	margin-bottom: 1.8rem !important;
+}
+
+.main-form-thanks .thanks-text {
+	text-align: center;
+	margin-bottom: 2.8rem;
+}
+
+.main-form-thanks .action-btn {
+	font-size: 1rem;
+	font-weight: 500;
+	padding-left: 28px;
+	background-color: #046bd2;
+	color: #FFF;
+	width: fit-content;
+	height: 3.2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.6rem 2.4rem;
+	margin: 0 auto;
+}
+
+.main-form-thanks .action-btn:hover {
+	color: #FFF;
+	opacity: 0.8;
+}
+
+.ast-container {
+	max-width: 100% !important;
+	width: 100% !important;
+	margin: 0 !important;
+}
+
+.main-form .btn {
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	width: fit-content;
+	height: 3.2rem;
+	padding: 0.4rem 2.6rem !important;
+	background: #046bd2;
+	justify-content: center !important;
+	color: #000;
+	border-radius: 4px;
+}
+
+.main-form .btn.btn-cancel {
+	background: #acacac;
+}
+
+@media only screen and (max-width: 767px) {
+	.main-form .btn {
+		width: 100%;
+		padding: 0.4rem 0.3rem !important;
+		height: 3.2rem;
+	}
+}
+
+.main-form .btn:hover {
+	opacity: 1;
+	color: #FFF;
+}
+
+.main-form .form-wrapper .card-list-wrapper .ncard-wrapper .ncard-label {
+	white-space: nowrap;
+}
+
+.main-form .form-wrapper .card-list-wrapper .ncard-wrapper .ncard {
+	border: none !important;
+	padding: 0 !important;
+	height: fit-content !important;
+}
+
+.main-form .card-list .cards-info {
+	border: none;
+	overflow: hidden;
+	resize: none;
+	line-height: 2rem;
+	padding: 0;
+}
+
+.main-form .half-width {
+	width: calc(50% - 0.8rem);
+}
+
+@media only screen and (max-width: 767px) {
+	.main-form .half-width {
+		width: calc(50% - 0.4rem);
+	}
+}
+
+.main-form .other-address-label {
+	margin-right: auto;
+}
+
+.main-form .other-address-label label:hover {
+	cursor: pointer;
+}
+
+.main-form .other-address-label input:hover {
+	cursor: pointer;
+}
+
+.main-form .other-address-label label {
+	list-style: none;
+	margin-top: 0.8rem;
+	display: flex;
+	align-items: center;
+	column-gap: 0.4rem;
+}
+
+.main-form .other-address-label input {
+	height: fit-content !important;
+}
+
+.vertical-wrapper.other-profile-info {
+	display: none;
+}
+
+.no-items {
+	padding-top: 6.4rem;
+	padding-bottom: 6.4rem;
+	color: #333;
+	font-size: 1.2rem;
+	text-align: center;
+}
+
+.wpcf7-spinner {
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translate(-20%, -50%);
+	margin: 0;
+}
+
+.sending-btn-wrapper p {
+	position: relative;
+}
+
+input[type="text"]::-webkit-input-placeholder,
+input[type="email"]::-webkit-input-placeholder,
+input[type="tel"]::-webkit-input-placeholder,
+input[type="number"]::-webkit-input-placeholder,
+input[type="password"]::-webkit-input-placeholder,
+select::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+	color: #AEAEAE;
+}
+
+
+/* loading spinner */
+.lds-spinner-wrapper {
+	display: block;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 10000;
+}
+
+.lds-spinner {
+	color: official;
+	display: none;
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	bottom: -9.6rem;
+	left: calc(50% - 40px);
+}
+
+.lds-spinner div {
+	transform-origin: 40px 40px;
+	animation: lds-spinner 1.2s linear infinite;
+}
+
+.lds-spinner div:after {
+	content: " ";
+	display: block;
+	position: absolute;
+	top: 3px;
+	left: 37px;
+	width: 6px;
+	height: 18px;
+	border-radius: 20%;
+	background: #959595;
+}
+
+.lds-spinner div:nth-child(1) {
+	transform: rotate(0deg);
+	animation-delay: -1.1s;
+}
+
+.lds-spinner div:nth-child(2) {
+	transform: rotate(30deg);
+	animation-delay: -1s;
+}
+
+.lds-spinner div:nth-child(3) {
+	transform: rotate(60deg);
+	animation-delay: -0.9s;
+}
+
+.lds-spinner div:nth-child(4) {
+	transform: rotate(90deg);
+	animation-delay: -0.8s;
+}
+
+.lds-spinner div:nth-child(5) {
+	transform: rotate(120deg);
+	animation-delay: -0.7s;
+}
+
+.lds-spinner div:nth-child(6) {
+	transform: rotate(150deg);
+	animation-delay: -0.6s;
+}
+
+.lds-spinner div:nth-child(7) {
+	transform: rotate(180deg);
+	animation-delay: -0.5s;
+}
+
+.lds-spinner div:nth-child(8) {
+	transform: rotate(210deg);
+	animation-delay: -0.4s;
+}
+
+.lds-spinner div:nth-child(9) {
+	transform: rotate(240deg);
+	animation-delay: -0.3s;
+}
+
+.lds-spinner div:nth-child(10) {
+	transform: rotate(270deg);
+	animation-delay: -0.2s;
+}
+
+.lds-spinner div:nth-child(11) {
+	transform: rotate(300deg);
+	animation-delay: -0.1s;
+}
+
+.lds-spinner div:nth-child(12) {
+	transform: rotate(330deg);
+	animation-delay: 0s;
+}
+
+@keyframes lds-spinner {
+	0% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}

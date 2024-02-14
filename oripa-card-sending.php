@@ -1,0 +1,342 @@
+<?php
+
+/**
+Template Name: カード発送
+ ***/
+get_header();
+
+$ncards = get_query_var('ncards') ? get_query_var('ncards') : 0;
+$card_ids = get_query_var('card_ids') ? get_query_var('card_ids') : 0;
+$arry_cardIDs = explode("-", $card_ids);
+
+$user_id = get_current_user_id();
+
+//get the delivery address
+if (is_user_logged_in()) {
+
+    $first_name = get_user_meta($user_id, 'billing_first_name', true);
+    $last_name = get_user_meta($user_id, 'billing_last_name', true);
+    $country_code = get_user_meta($user_id, 'billing_country', true);
+    $wc_countries = new WC_Countries();
+    $country = $wc_countries->countries[$country_code];
+    $post_code = get_user_meta($user_id, 'billing_postcode', true);
+    $state_code = get_user_meta($user_id, 'billing_state', true);
+    $wc_countries = WC()->countries;
+    $states = $wc_countries->get_states($country_code);
+    if (isset($states[$state_code])) {
+        $province = $states[$state_code];
+    } else {
+        $province = 'Unknown';
+    }
+    $city = get_user_meta($user_id, 'billing_city', true);
+    $address1 = get_user_meta($user_id, 'billing_address_1', true);
+    $address2 = get_user_meta($user_id, 'billing_address_2', true);
+    $phone = get_user_meta($user_id, 'billing_phone', true);
+    $email = get_user_meta($user_id, 'billing_email', true);
+
+    $mywpdb = new wpdb('tglobal', 'V-dF4pjMsBf_', 'tglobal_ec', 'mysql57.tglobal.sakura.ne.jp');
+    $table_name = 'wp1567b2winning_cards';
+
+    $placeholders = array_fill(0, count($arry_cardIDs), '%s');
+    $placeholders = implode(', ', $placeholders);
+
+    $card_ids_string = "'" . implode("','", $arry_cardIDs) . "'";
+
+    $results = $mywpdb->get_results(
+        $mywpdb->prepare("SELECT card_title, card_price FROM $table_name WHERE user_id = %d AND card_id IN ($card_ids_string)", $user_id),
+        ARRAY_A
+    );  //get all the card_price of the new winning cards
+}
+
+?>
+
+<main id="gacha-card-sending">
+    <div class="container main-form">
+        <?php if (is_user_logged_in()) : ?>
+            <?php echo do_shortcode('[contact-form-7 id="0fd7de2" title="カード発送"]'); ?>
+        <?php else : ?>
+            <div class="no-items">この機能を利用するには、ログインする必要があります。</div>
+        <?php endif; ?>
+    </div>
+
+</main>
+
+<script type="text/javascript">
+    !(function($) {
+        $(document).ready(function() {
+
+            <?php $ncard = count($results); ?>
+
+            $('#lastname').val('<?php echo $last_name; ?>');
+            $('#firstname').val('<?php echo $first_name; ?>');
+            $('#country').val('<?php echo $country; ?>');
+            $('#lastname').val('<?php echo $last_name; ?>');
+            $('#post-code').val('<?php echo $post_code; ?>');
+            $('#province').val('<?php echo $province; ?>');
+            $('#city').val('<?php echo $city; ?>');
+            $('#street').val('<?php echo $address1; ?>');
+            $('#building-number').val('<?php echo $address2; ?>');
+            $('#phone').val('<?php echo $phone; ?>');
+            $('#email').val('<?php echo $email; ?>');
+
+            let ncard_element =
+                '<div class="ncard-label">発送するカード</div>' +
+                '<input type="text" name="ncard" class="ncard" value="<?php echo $ncard; ?>枚" readonly>';
+            $('.ncard-wrapper').append(ncard_element);
+
+            var element = '<textarea name="cards-info" class="cards-info" readonly>';
+            <?php $i = 0; ?>
+            <?php foreach ($results as $result) : ?>
+                <?php if ($i < $ncard) : ?>
+                    element = element + '<?php echo $result['card_title']; ?>            <?php echo $result['card_price']; ?>PT&#10';
+                <?php else : ?>
+                    element = element + '<?php echo $result['card_title']; ?>            <?php echo $result['card_price']; ?>PT';
+                <?php endif; ?>
+                <?php $i++; ?>
+            <?php endforeach; ?>
+            element = element + '</textarea>';
+            $('.card-list').append(element);
+
+            // $('.cards-info').style.height = 'auto';
+            // $('.cards-info').style.height = ($('.cards-info').scrollHeight) + 'px';
+            $('.cards-info').css('height', 'auto');
+            $('.cards-info').css('height', $('.cards-info').prop('scrollHeight') + 'px');
+
+            $('#other-addr input').change(function() {
+                if ($(this).is(':checked')) {
+                    $('.other-profile-info').show();
+                    $('.other-profile-info').css('display', 'flex');
+                } else {
+                    $('.other-profile-info').hide();
+                }
+            });
+
+            ///////////////////////////////2024.02.12 dron417///////////////////////////////////
+            var spinner = '<div class="lds-spinner-wrapper"><div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>';
+            $('body').append(spinner);
+
+            
+        });
+
+        //alert
+        // https://codepen.io/Aladini/pen/NbbQPL
+        /* file */
+        "function" != typeof Object.create && (Object.create = function(t) {
+                function o() {}
+                return o.prototype = t, new o
+            }),
+            function(t, o) {
+                "use strict";
+                var i = {
+                    _positionClasses: ["bottom-left", "bottom-right", "top-right", "top-left", "bottom-center", "top-center", "mid-center"],
+                    _defaultIcons: ["success", "error", "info", "warning"],
+                    init: function(o) {
+                        this.prepareOptions(o, t.toast.options), this.process()
+                    },
+                    prepareOptions: function(o, i) {
+                        var s = {};
+                        "string" == typeof o || o instanceof Array ? s.text = o : s = o, this.options = t.extend({}, i, s)
+                    },
+                    process: function() {
+                        this.setup(), this.addToDom(), this.position(), this.bindToast(), this.animate()
+                    },
+                    setup: function() {
+                        var o = "";
+                        if (this._toastEl = this._toastEl || t("<div></div>", {
+                                "class": "jq-toast-single"
+                            }), o += '<span class="jq-toast-loader"></span>', this.options.allowToastClose && (o += '<span class="close-jq-toast-single">&times;</span>'), this.options.text instanceof Array) {
+                            this.options.heading && (o += '<h2 class="jq-toast-heading">' + this.options.heading + "</h2>"), o += '<ul class="jq-toast-ul">';
+                            for (var i = 0; i < this.options.text.length; i++) o += '<li class="jq-toast-li" id="jq-toast-item-' + i + '">' + this.options.text[i] + "</li>";
+                            o += "</ul>"
+                        } else this.options.heading && (o += '<h2 class="jq-toast-heading">' + this.options.heading + "</h2>"), o += this.options.text;
+                        this._toastEl.html(o), this.options.bgColor !== !1 && this._toastEl.css("background-color", this.options.bgColor), this.options.textColor !== !1 && this._toastEl.css("color", this.options.textColor), this.options.textAlign && this._toastEl.css("text-align", this.options.textAlign), this.options.icon !== !1 && (this._toastEl.addClass("jq-has-icon"), -1 !== t.inArray(this.options.icon, this._defaultIcons) && this._toastEl.addClass("jq-icon-" + this.options.icon))
+                    },
+                    position: function() {
+                        "string" == typeof this.options.position && -1 !== t.inArray(this.options.position, this._positionClasses) ? "bottom-center" === this.options.position ? this._container.css({
+                            left: t(o).outerWidth() / 2 - this._container.outerWidth() / 2,
+                            bottom: 20
+                        }) : "top-center" === this.options.position ? this._container.css({
+                            left: t(o).outerWidth() / 2 - this._container.outerWidth() / 2,
+                            top: 20
+                        }) : "mid-center" === this.options.position ? this._container.css({
+                            left: t(o).outerWidth() / 2 - this._container.outerWidth() / 2,
+                            top: t(o).outerHeight() / 2 - this._container.outerHeight() / 2
+                        }) : this._container.addClass(this.options.position) : "object" == typeof this.options.position ? this._container.css({
+                            top: this.options.position.top ? this.options.position.top : "auto",
+                            bottom: this.options.position.bottom ? this.options.position.bottom : "auto",
+                            left: this.options.position.left ? this.options.position.left : "auto",
+                            right: this.options.position.right ? this.options.position.right : "auto"
+                        }) : this._container.addClass("bottom-left")
+                    },
+                    bindToast: function() {
+                        var t = this;
+                        this._toastEl.on("afterShown", function() {
+                            t.processLoader()
+                        }), this._toastEl.find(".close-jq-toast-single").on("click", function(o) {
+                            o.preventDefault(), "fade" === t.options.showHideTransition ? (t._toastEl.trigger("beforeHide"), t._toastEl.fadeOut(function() {
+                                t._toastEl.trigger("afterHidden")
+                            })) : "slide" === t.options.showHideTransition ? (t._toastEl.trigger("beforeHide"), t._toastEl.slideUp(function() {
+                                t._toastEl.trigger("afterHidden")
+                            })) : (t._toastEl.trigger("beforeHide"), t._toastEl.hide(function() {
+                                t._toastEl.trigger("afterHidden")
+                            }))
+                        }), "function" == typeof this.options.beforeShow && this._toastEl.on("beforeShow", function() {
+                            t.options.beforeShow()
+                        }), "function" == typeof this.options.afterShown && this._toastEl.on("afterShown", function() {
+                            t.options.afterShown()
+                        }), "function" == typeof this.options.beforeHide && this._toastEl.on("beforeHide", function() {
+                            t.options.beforeHide()
+                        }), "function" == typeof this.options.afterHidden && this._toastEl.on("afterHidden", function() {
+                            t.options.afterHidden()
+                        })
+                    },
+                    addToDom: function() {
+                        var o = t(".jq-toast-wrap");
+                        if (0 === o.length ? (o = t("<div></div>", {
+                                "class": "jq-toast-wrap"
+                            }), t("body").append(o)) : (!this.options.stack || isNaN(parseInt(this.options.stack, 10))) && o.empty(), o.find(".jq-toast-single:hidden").remove(), o.append(this._toastEl), this.options.stack && !isNaN(parseInt(this.options.stack), 10)) {
+                            var i = o.find(".jq-toast-single").length,
+                                s = i - this.options.stack;
+                            s > 0 && t(".jq-toast-wrap").find(".jq-toast-single").slice(0, s).remove()
+                        }
+                        this._container = o
+                    },
+                    canAutoHide: function() {
+                        return this.options.hideAfter !== !1 && !isNaN(parseInt(this.options.hideAfter, 10))
+                    },
+                    processLoader: function() {
+                        if (!this.canAutoHide() || this.options.loader === !1) return !1;
+                        var t = this._toastEl.find(".jq-toast-loader"),
+                            o = (this.options.hideAfter - 400) / 1e3 + "s",
+                            i = this.options.loaderBg,
+                            s = t.attr("style") || "";
+                        s = s.substring(0, s.indexOf("-webkit-transition")), s += "-webkit-transition: width " + o + " ease-in;                       -o-transition: width " + o + " ease-in;                       transition: width " + o + " ease-in;                       background-color: " + i + ";", t.attr("style", s).addClass("jq-toast-loaded")
+                    },
+                    animate: function() {
+                        var t = this;
+                        if (this._toastEl.hide(), this._toastEl.trigger("beforeShow"), "fade" === this.options.showHideTransition.toLowerCase() ? this._toastEl.fadeIn(function() {
+                                t._toastEl.trigger("afterShown")
+                            }) : "slide" === this.options.showHideTransition.toLowerCase() ? this._toastEl.slideDown(function() {
+                                t._toastEl.trigger("afterShown")
+                            }) : this._toastEl.show(function() {
+                                t._toastEl.trigger("afterShown")
+                            }), this.canAutoHide()) {
+                            var t = this;
+                            o.setTimeout(function() {
+                                "fade" === t.options.showHideTransition.toLowerCase() ? (t._toastEl.trigger("beforeHide"), t._toastEl.fadeOut(function() {
+                                    t._toastEl.trigger("afterHidden")
+                                })) : "slide" === t.options.showHideTransition.toLowerCase() ? (t._toastEl.trigger("beforeHide"), t._toastEl.slideUp(function() {
+                                    t._toastEl.trigger("afterHidden")
+                                })) : (t._toastEl.trigger("beforeHide"), t._toastEl.hide(function() {
+                                    t._toastEl.trigger("afterHidden")
+                                }))
+                            }, this.options.hideAfter)
+                        }
+                    },
+                    reset: function(o) {
+                        "all" === o ? t(".jq-toast-wrap").remove() : this._toastEl.remove()
+                    },
+                    update: function(t) {
+                        this.prepareOptions(t, this.options), this.setup(), this.bindToast()
+                    }
+                };
+                t.toast = function(t) {
+                    var o = Object.create(i);
+                    return o.init(t, this), {
+                        reset: function(t) {
+                            o.reset(t)
+                        },
+                        update: function(t) {
+                            o.update(t)
+                        }
+                    }
+                }, t.toast.options = {
+                    text: "",
+                    heading: "",
+                    showHideTransition: "fade",
+                    allowToastClose: !0,
+                    hideAfter: 3e3,
+                    loader: !0,
+                    loaderBg: "#9EC600",
+                    stack: 5,
+                    position: "bottom-left",
+                    bgColor: !1,
+                    textColor: !1,
+                    textAlign: "left",
+                    icon: !1,
+                    beforeShow: function() {},
+                    afterShown: function() {},
+                    beforeHide: function() {},
+                    afterHidden: function() {}
+                }
+            }(jQuery, window, document);
+
+        /* Starts from here */
+        $("#error").click(function() {
+            $.toast({
+                heading: 'Error',
+                text: 'Try again!',
+                icon: 'error',
+                loader: true,
+                loaderBg: '#fff',
+                showHideTransition: 'plain',
+                hideAfter: 4000,
+                position: {
+                    left: 100,
+                    top: 30
+                }
+            })
+        })
+
+        $("#success").click(function() {
+            $.toast({
+                heading: 'Success',
+                text: 'Logged In',
+                icon: 'success',
+                loader: true,
+                loaderBg: '#fff',
+                showHideTransition: 'fade',
+                hideAfter: 4000,
+                allowToastClose: false,
+                position: {
+                    left: 100,
+                    top: 30
+                }
+            })
+        })
+
+        $("#info").click(function() {
+            $.toast({
+                heading: 'Info',
+                text: 'Important information',
+                icon: 'info',
+                loader: true,
+                loaderBg: '#fff',
+                showHideTransition: 'slide',
+                hideAfter: 4000,
+                allowToastClose: false,
+                position: {
+                    left: 100,
+                    top: 30
+                }
+            })
+        })
+
+        $("#warning").click(function() {
+            $.toast({
+                heading: 'Warning',
+                text: 'You cant do that!',
+                icon: 'warning',
+                loader: false,
+                hideAfter: false,
+                allowToastClose: true,
+                position: {
+                    left: 100,
+                    top: 30
+                }
+            })
+        })
+    })(jQuery);
+</script>
+
+<?php get_footer(); ?>
