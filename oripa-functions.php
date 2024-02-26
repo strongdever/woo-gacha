@@ -4,6 +4,7 @@
 add_filter('query_vars', function ($vars) {
   $vars[] = 'ncards';
   $vars[] = 'card_ids';
+  $vars[] = 'postid';
   return $vars;
 });
 
@@ -29,6 +30,7 @@ function gacha_list($atts)
 
   if ($wp_query->have_posts()) {
     $i = 0;
+    $top_gacha_list = '<div class="gacha-list">';
     while ($wp_query->have_posts()) {
       $wp_query->the_post();
 
@@ -62,15 +64,19 @@ function gacha_list($atts)
           $sold_out = $value;
         }
       }
-      if ($current_nCard < 1 || $sold_out == 'sold-out') {
+      if ($current_nCard < 1) {
         $display = 'block';
       } else {
         $display = 'none';
       }
+
+      if ($sold_out == 'sold-out') {
+        $hidden = 'none';
+      } else {
+        $hidden = 'block';
+      }
       $top_gacha_list .=
-        ($i % 2 == 0 ? '<div class="gacha-row">' : '') .
-        ($i % 2 == 0 ? '<div class="row-wrapper">' : '') .
-        '<div class="gacha-item slide-in scroll-in">
+        '<div class="gacha-item slide-in scroll-in" style="display: ' . $hidden . ';">
               <div class="item-wrapper">
                 <div class="item-body">
                   <div class="soldout-wrapper" style="display: ' . $display . ';"><div class="soldout">SOLD OUT</div></div>
@@ -78,7 +84,10 @@ function gacha_list($atts)
                     <img class="thumbnail" src="' . $thumb_img . '">
                     <div class="process-bar">
                       <div class="number-text">
-                        残<span class="current-num">' . $current_nCard . '</span>/<span class="total-num">' . $total_ncard . '</span>
+                        <div class="percent-bar">
+                          <span class="current-percent" style="width:' . $current_nCard / $total_ncard * 100 . '%">
+                        </div>
+                        <div class="card-balance">残<span class="current-num">' . $current_nCard . '</span>/<span class="total-num">' . $total_ncard . '</span></div>
                       </div>
                     </div>
                   </div>
@@ -100,16 +109,13 @@ function gacha_list($atts)
                     <img class="btn-right-stars" src="' . T_DIRE_URI . '-child/assets/img/' . ($i % 2 == 0 ? 'right-stars-red.png' : 'right-stars-yellow.png') . '">
                   </div>
                 </div>
-                <a class="btn-detail" href="' . get_the_permalink() . '">
-                  <img src="https://t-card.shop/wp-content/uploads/' . ($i % 2 == 0 ? 'btn-green.png' : 'btn-orange.png') . '">
-                  <span>当たり一覧</span>
+                <a class="btn-detail yellow-btn" href="' . get_the_permalink() . '">
+                  当たり一覧
                 </a>
               </div>
-            </div>'
-        . ($i % 2 == 1 ? '</div>' : '')
-        . ($i % 2 == 1 ? '</div>' : '');
-      $i++;
+            </div>';
     }
+    $top_gacha_list .= '</div>';
   }
   wp_reset_query();
 
@@ -132,15 +138,19 @@ function card_list($atts)
 
     if ($winning_update == 'all') {
       $winning_cards = $mywpdb->get_results(
-        $mywpdb->prepare("SELECT card_id, post_id, card_title, card_filename, card_price FROM $table_name WHERE user_id = %d", $user_id),
+        $mywpdb->prepare("SELECT card_id, post_id, card_title, card_filename, card_price FROM $table_name WHERE user_id = %d ORDER BY card_price DESC", $user_id),
         ARRAY_A
       );
     } else {
       $winning_cards = $mywpdb->get_results(
-        $mywpdb->prepare("SELECT card_id, post_id, card_title, card_filename, card_price FROM $table_name WHERE user_id = %d AND winning_update = %s", $user_id, $winning_update),
+        $mywpdb->prepare("SELECT card_id, post_id, card_title, card_filename, card_price FROM $table_name WHERE user_id = %d AND winning_update = %s ORDER BY card_price DESC", $user_id, $winning_update),
         ARRAY_A
       );
     }
+
+    $path_parts = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+    $path_parts = pathinfo($path_parts);
+    $page_slug = $path_parts['filename'];
 
     $ncard = count($winning_cards);
     if (Get_Balance()) {
@@ -192,15 +202,15 @@ function card_list($atts)
                     <div class="refunds-points">' . $winning_card['card_price'] . 'pt</div>
                   </div>
                   <div class="btns">
-                    <div class="btn btn-single-refunds" data-userid="' . $user_id . '" data-ncard="' . $ncard . '" data-currentbalance="' . $current_balance . '" data-nextbalance="' . $next_balance . '">
+                    <div class="btn btn-single-refunds" data-userid="' . $user_id . '" data-ncard="' . $ncard . '" data-currentbalance="' . $current_balance . '" data-nextbalance="' . $next_balance . '" data-pageslug="' . $page_slug . '" data-postid="' . $post_id . '">
                         <span>
-                          コインに替える<br>' .
+                          ポイントに交換<br>' .
           $winning_card['card_price'] . 'pt
                         </span>
                     </div>
-                    <div class="btn btn-single-send" data-userid="' . $user_id . '" data-ncard="' . $ncard . '" data-currentbalance="' . $current_balance . '" data-nextbalance="' . $next_balance . '">
+                    <div class="btn btn-single-send" data-userid="' . $user_id . '" data-ncard="' . $ncard . '" data-currentbalance="' . $current_balance . '" data-nextbalance="' . $next_balance . '" data-pageslug="' . $page_slug . '" data-postid="' . $post_id . '">
                         <span>
-                          カードを発送する
+                          カードを発送
                         </span>
                     </div>
                   </div>
@@ -211,11 +221,11 @@ function card_list($atts)
       $display_card_list .=
         '</ul>
           <div class="options">
-            <button class="btn-option btn-coin" data-userid="' . $user_id . '" data-ncard="' . $ncard . '" data-currentbalance="' . $current_balance . '" data-nextbalance="' . $next_balance . '">
-              <span>コインに替える</span>
+            <button class="btn-option btn-coin" data-userid="' . $user_id . '" data-ncard="' . $ncard . '" data-currentbalance="' . $current_balance . '" data-nextbalance="' . $next_balance . '" data-pageslug="' . $page_slug . '" data-postid="' . $post_id . '">
+              <span>ポイントに交換</span>
             </button>
-            <button class="btn-option btn-card-sending" data-userid="' . $user_id . '" data-ncard="' . $ncard . '" data-currentbalance="' . $current_balance . '" data-nextbalance="' . $next_balance . '">
-              <span>カードを発送する</span>
+            <button class="btn-option btn-card-sending" data-userid="' . $user_id . '" data-ncard="' . $ncard . '" data-currentbalance="' . $current_balance . '" data-nextbalance="' . $next_balance . '" data-pageslug="' . $page_slug . '" data-postid="' . $post_id . '">
+              <span>カードを発送</span>
             </div>
             </button>
           </div>';
@@ -223,56 +233,65 @@ function card_list($atts)
       $display_card_list .=
         '<div class="no-items">表示するカード情報がありません。</div>';
     }
+
+    if (is_user_logged_in()) {  //continue gacha
+      // $user_id = get_current_user_id();
+      $login = true;
+    } else {
+      $login = false;
+    }
+
+    $user_id = get_current_user_id(); // Replace with the user ID
+    $metaKey = 'post_id_store';
+
+    $post_id = get_user_meta($user_id, $metaKey, true);
+    $gacha_price = get_field('gacha-price', $post_id);
+    $total_ncard = get_field('total_ncards', $post_id);
+    $current_nCard = get_post_meta($post_id, 'current_nCard', true);
+    $points_balance = Get_Balance();
+    $number = 10;
+    if ($current_nCard < 10) {
+      $number = $current_nCard;
+    }
+    if ($current_nCard < 1) {
+      $number = 10;
+    }
+
+    $display_card_list .=
+      '<div class="continue-gacha">
+      <div class="label">もう一度引く</div>
+      <div class="btns-wrapper">
+      <img class="btn-left-stars btn-stars" src="' . T_DIRE_URI . '-child/assets/img/right-stars-yellow.png">
+      <div class="btns-bar">
+        <div class="btns" data-userid="' . $login . '" data-id="' . $post_id . '" data-price="' . $gacha_price . '" data-totalncard="' . $total_ncard . '" data-currentncard="' . $current_nCard . '" data-pointbalance="' . $points_balance . '">
+          <div class="btn-1 btn btn-gacha" data-number="1">
+            <div class="btn-content">
+              1<span>SLOT</span> ' . $gacha_price . 'PT
+            </div>
+            <img class="btn-bg" src="' . T_DIRE_URI . '-child/assets/img/oripa/btn-back-yellow.png">
+          </div>
+          <div class="btn-10 btn btn-gacha" data-number="' . $number . '">
+            <div class="btn-content">
+            ' . $number . '<span>SLOT</span> ' . $gacha_price * $number . 'PT
+            </div>
+            <img class="btn-bg" src="' . T_DIRE_URI . '-child/assets/img/oripa/btn-back-blue.png">
+          </div>
+        </div>
+        <div class="display-ncards number-text">
+          <div class="percent-bar">
+            <span class="current-percent" style="width:' . $current_nCard / $total_ncard * 100 . '%">
+          </div>
+          <div class="card-balance">残<span class="current-num">' . $current_nCard . '</span>/<span class="total-num">' . $total_ncard . '</span></div>
+        </div>
+      </div>
+      <img class="btn-right-stars btn-stars" src="' . T_DIRE_URI . '-child/assets/img/right-stars-red.png">
+    </div>
+    </div>';
   } else {
     $display_card_list .=
       '<div class="no-items">表示するカード情報がありません。</div>';
   }
 
-  if (is_user_logged_in()) {  //continue gacha
-    // $user_id = get_current_user_id();
-    $login = true;
-  } else {
-    $login = false;
-  }
-
-  $user_id = get_current_user_id(); // Replace with the user ID
-  $metaKey = 'post_id_store';
-
-  $post_id = get_user_meta($user_id, $metaKey, true);
-  $gacha_price = get_field('gacha-price', $post_id);
-  $total_ncard = get_field('total_ncards', $post_id);
-  $current_nCard = get_post_meta($post_id, 'current_nCard', true);
-  $points_balance = Get_Balance();
-  $number = 10;
-  if ($current_nCard < 10) {
-    $number = $current_nCard;
-  }
-  if ($current_nCard < 1) {
-    $number = 10;
-  }
-
-  $display_card_list .=
-    '<div class="continue-gacha">
-    <div class="label">もう一度引く</div>
-    <div class="btns-wrapper">
-    <img class="btn-left-stars btn-stars" src="' . T_DIRE_URI . '-child/assets/img/right-stars-yellow.png">
-    <div class="btns" data-userid="' . $login . '" data-id="' . $post_id . '" data-price="' . $gacha_price . '" data-totalncard="' . $total_ncard . '" data-currentncard="' . $current_nCard . '" data-pointbalance="' . $points_balance . '">
-      <div class="btn-1 btn btn-gacha" data-number="1">
-        <div class="btn-content">
-          1<span>SLOT</span> ' . $gacha_price . 'PT
-        </div>
-        <img class="btn-bg" src="' . T_DIRE_URI . '-child/assets/img/oripa/btn-back-yellow.png">
-      </div>
-      <div class="btn-10 btn btn-gacha" data-number="' . $number . '">
-        <div class="btn-content">
-        ' . $number . '<span>SLOT</span> ' . $gacha_price * $number . 'PT
-        </div>
-        <img class="btn-bg" src="' . T_DIRE_URI . '-child/assets/img/oripa/btn-back-blue.png">
-      </div>
-    </div>
-    <img class="btn-right-stars btn-stars" src="' . T_DIRE_URI . '-child/assets/img/right-stars-red.png">
-  </div>
-  </div>';
   return $display_card_list;
 }
 add_shortcode('oripa_card_list', 'card_list');
@@ -502,7 +521,7 @@ function Deduction_Coin($post_id, $number)
       mycred_subtract($reference, $user_id, $amount, $entry);
       $result = 'success';
     } else {
-      $result = 'コインが足りません!';
+      $result = 'ポイントが足りません!';
     }
   } else {
     $result = 'ログインしてから実行してください';
@@ -551,7 +570,7 @@ function Card_to_Point($card_ids)
       $reference = $ncard . 'CARDS';
     }
     $userid = get_current_user_id();
-    $entry = 'コイン替える';
+    $entry = 'ポイント替える';
     mycred_add($reference, $userid, $reward_price, $entry);
 
     $func_result = 'success';
@@ -709,5 +728,35 @@ function custom_dashboard_css()
 add_action('admin_enqueue_scripts', 'custom_dashboard_css');
 
 add_filter('show_admin_bar', '__return_false', 99); //remove the space by the admin bar
+
+function oripa_button_shortcode($atts)
+{
+  // ショートコードの属性（attributes）を指定
+  $atts = shortcode_atts(
+    array(
+      'text' => 'ショップを見る', // デフォルトのテキスト
+      'background_image' => 'https://t-card.shop/wp-content/uploads/btn-skyblue.png', // デフォルトの背景画像URL
+      'slug' => '', // リンク先URL
+    ),
+    $atts,
+    'shop_button'
+  );
+
+  // ショートコードの属性からスラッグを取得
+  $slug = $atts['slug'];
+  // ショートコードの中身
+  $home_url = home_url();
+  // スラッグとホームURLを組み合わせてリンクを生成
+  $link = $home_url . '/' . $slug;
+
+  $button_html = '
+            <a class="yellow-btn" href="' . esc_url($link) . '">' . esc_html($atts['text']) . '</a>
+    ';
+
+  return $button_html;
+}
+
+// ショートコードの登録
+add_shortcode('oripa_btn', 'oripa_button_shortcode');
 
 //<----------------------------oripa page end----------------------

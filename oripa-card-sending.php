@@ -7,7 +7,10 @@ get_header();
 
 $ncards = get_query_var('ncards') ? get_query_var('ncards') : 0;
 $card_ids = get_query_var('card_ids') ? get_query_var('card_ids') : 0;
+$post_id = get_query_var('postid') ? get_query_var('postid') : 0;
 $arry_cardIDs = explode("-", $card_ids);
+
+$agency_email = get_field('agency_email', $post_id);
 
 $user_id = get_current_user_id();
 
@@ -79,6 +82,11 @@ if (is_user_logged_in()) {
             $('#phone').val('<?php echo $phone; ?>');
             $('#email').val('<?php echo $email; ?>');
 
+            console.log('---------');
+            var postid = getUrlParameter('postid')
+            $('#agency_email').val('<?php echo $agency_email; ?>');
+            console.log($('#agency_email').val());
+
             let ncard_element =
                 '<div class="ncard-label">発送するカード</div>' +
                 '<input type="text" name="ncard" class="ncard" value="<?php echo $ncard; ?>枚" readonly>';
@@ -115,7 +123,15 @@ if (is_user_logged_in()) {
             var spinner = '<div class="lds-spinner-wrapper"><div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>';
             $('body').append(spinner);
 
-            
+            ///////////////////////////////2024.02.26 dron417///////////////////////////////////
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                var results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+
         });
 
         //alert

@@ -52,19 +52,19 @@
                 '<button class="close" role="button">X</button>' +
                 '<div class="notice-title">アセロラ降臨！サポぶち抜きガチ</div>' +
                 '<p class="description">' +
-                'コインを消費してガチャを' + number + '回引きます。<br>' +
+                'ポイントを消費してガチャを' + number + '回引きます。<br>' +
                 'よろしいですか？' +
                 '</p>' +
                 '<div class="coin-numbers">' +
                 '<div class="current-coin coin-number">' +
                 '<img class="coin-img" src="https://t-card.shop/wp-content/themes/astra-child/assets/img/coin.png">' +
-                '<div class="label">現在のコイン数 : </div>' +
+                '<div class="label">現在のポイント数 : </div>' +
                 '<div class="current-coin-number n-card">' + points_balance + '</div>' +
                 '<span class="unit-label">coin</span>' +
                 '</div>' +
                 '<div class="after-coin coin-number">' +
                 '<img class="coin-img" src="https://t-card.shop/wp-content/themes/astra-child/assets/img/coin.png">' +
-                '<div class="label">引いた後のコイン数 : </div>' +
+                '<div class="label">引いた後のポイント数 : </div>' +
                 '<div class="after-coin-number n-card">' + (points_balance - gacha_price * number) + '</div>' +
                 '<span class="unit-label">coin</span>' +
                 '</div>' +
@@ -81,7 +81,6 @@
 
             $('.btn-ok').off('click').on('click', function () {
                 // closeModal();
-                console.log(f_ok);
                 if (f_ok) {
                     return;
                 }
@@ -113,7 +112,7 @@
                 if (parseInt(after_balance) < 0) {   //not enough coin
                     $.toast({
                         heading: '通知',
-                        text: 'コインが足りません',
+                        text: 'ポイントが足りません',
                         icon: 'info',
                         loader: true,
                         loaderBg: '#fff',
@@ -202,10 +201,17 @@
                         '<video class="video-screen" autoplay>' +
                         '<source src="' + video_url + '" type="video/mp4">' +
                         '</video>' +
-                        '</div>';
+                        '</div>' +
+                        '<a class="video-skip yellow-btn" href="https://t-card.shop/card-list/">スキップ</a>';
                     $('body').append(video_content);
                     $('.video-wrapper').css('opacity', 1);
                     var video = $(".video-screen")[0];
+
+                    $('.video-skip').on('click', function () {
+                        video.pause();
+                        var url = "https://t-card.shop/card-list";
+                        window.location.href = url;
+                    });
 
                     video.onended = function () {
                         var url = "https://t-card.shop/card-list";
@@ -247,7 +253,7 @@
         });
 
         /////////////////////////////////////////////////////////////////////////////////////
-        $('.btn-detail').click(function(event) {
+        $('.btn-detail').click(function (event) {
             if (f_ok) {
                 event.preventDefault();
                 return;
@@ -256,17 +262,12 @@
 
         /////////////////////////////////////////////////////////////////////////////////////
 
-        $('.btn-submit').off('click').on('click', function () {
-            console.log("submit");
-        })
-
         $('.btn-coin').off('click').on('click', function () {   //まとめてptに変える
             if (f_ok) {
                 return;
             }
 
             var arry_cards = get_selected_cards();
-            console.log(arry_cards);
 
             var number = arry_cards.length;
             if (number == 0) {
@@ -288,30 +289,31 @@
             }
             var userid = $(this).data('userid');
             var current_balance = $(this).data('currentbalance');
+            var page_slug = $(this).data('pageslug');
             var next_balance = current_balance + get_selected_cards_price();
             var modal_content =
                 '<div class="mask" role="dialog">' +
                 '</div>' +
                 '<div class="modal" role="alert">' +
                 '<button class="close" role="button">X</button>' +
-                '<div class="notice-title">カードをCoinに替える</div>' +
-                '<p class="description">選択した保有カードをマイコインに還元します。<br>よろしいですか？</p>' +
+                '<div class="notice-title">カードをポイントに還元</div>' +
+                '<p class="description">選択した保有カードをポイントに<br class="sp">還元します。<br class="pc">よろしいですか？</p>' +
                 '<div class="coin-numbers">' +
                 '<div class="current-coin coin-number">' +
                 '<img class="coin-img" src="https://t-card.shop/wp-content/themes/astra-child/assets/img/coin.png">' +
-                '<div class="label">現在のコイン数 : </div>' +
+                '<div class="label">現在のポイント数 : </div>' +
                 '<div class="current-coin-number n-card">' + current_balance + '</div>' +
                 '<span class="unit-label">coin</span>' +
                 '</div>' +
                 '<div class="after-coin coin-number">' +
                 '<img class="coin-img" src="https://t-card.shop/wp-content/themes/astra-child/assets/img/coin.png">' +
-                '<div class="label">還元した後のコイン数 : </div>' +
+                '<div class="label">還元した後のポイント数 : </div>' +
                 '<div class="after-coin-number n-card">' + next_balance + '</div>' +
                 '<span class="unit-label">coin</span>' +
                 '</div>' +
                 '</div>' +
                 '<div class="btns">' +
-                '<button class="btn-store-coin btn-item" data-userid="' + userid + '" data-number="' + number + '">ポイントに還元する</button>' +
+                '<button class="btn-store-coin btn-item" data-userid="' + userid + '" data-number="' + number + '" data-pageslug="' + page_slug + '">ポイントに還元する</button>' +
                 '<button class="btn-cancel btn-item">キャンセル</button>' +
                 '</div>' +
                 '</div>';
@@ -325,13 +327,13 @@
 
             $('.btn-store-coin').off('click').on('click', function () {
                 // closeModal();
-                console.log(f_ok);
                 if (f_ok) {
                     return;
                 }
                 f_ok = true;
                 var userid = $(this).data('userid');
                 var number = $(this).data('number');
+                var pageslug = $(this).data('pageslug');
                 if (userid == 0) {
                     $.toast({
                         heading: '通知',
@@ -351,7 +353,7 @@
                     return 0;
                 }
 
-                Card_to_Point(arry_cards);
+                Card_to_Point(arry_cards, pageslug);
             });
 
             // Call the closeModal function on the clicks/keyboard
@@ -373,7 +375,6 @@
             $(this).parent().parent().parent().find('.input-wrapper .card-id').prop('checked', true);
 
             var arry_cards = get_selected_cards();
-            console.log(arry_cards);
 
             var number = arry_cards.length;
             if (number == 0) {
@@ -396,29 +397,30 @@
             var userid = $(this).data('userid');
             var current_balance = $(this).data('currentbalance');
             var next_balance = current_balance + get_selected_cards_price();
+            var page_slug = $(this).data('pageslug');
             var modal_content =
                 '<div class="mask" role="dialog">' +
                 '</div>' +
                 '<div class="modal" role="alert">' +
                 '<button class="close" role="button">X</button>' +
-                '<div class="notice-title">カードをCoinに替える</div>' +
-                '<p class="description">選択した保有カードをマイコインに還元します。<br>よろしいですか？</p>' +
+                '<div class="notice-title">カードをポイントに還元</div>' +
+                '<p class="description">選択した保有カードをポイントに<br class="sp">還元します。<br class="pc">よろしいですか？</p>' +
                 '<div class="coin-numbers">' +
                 '<div class="current-coin coin-number">' +
                 '<img class="coin-img" src="https://t-card.shop/wp-content/themes/astra-child/assets/img/coin.png">' +
-                '<div class="label">現在のコイン数 : </div>' +
+                '<div class="label">現在のポイント数 : </div>' +
                 '<div class="current-coin-number n-card">' + current_balance + '</div>' +
                 '<span class="unit-label">coin</span>' +
                 '</div>' +
                 '<div class="after-coin coin-number">' +
                 '<img class="coin-img" src="https://t-card.shop/wp-content/themes/astra-child/assets/img/coin.png">' +
-                '<div class="label">還元した後のコイン数 : </div>' +
+                '<div class="label">還元した後のポイント数 : </div>' +
                 '<div class="after-coin-number n-card">' + next_balance + '</div>' +
                 '<span class="unit-label">coin</span>' +
                 '</div>' +
                 '</div>' +
                 '<div class="btns">' +
-                '<button class="btn-store-coin btn-item" data-userid="' + userid + '" data-number="' + number + '">ポイントに還元する</button>' +
+                '<button class="btn-store-coin btn-item" data-userid="' + userid + '" data-number="' + number + '" data-pageslug="' + page_slug + '">ポイントに還元する</button>' +
                 '<button class="btn-cancel btn-item">キャンセル</button>' +
                 '</div>' +
                 '</div>';
@@ -432,13 +434,14 @@
 
             $('.btn-store-coin').off('click').on('click', function () {
                 // closeModal();
-                console.log(f_ok);
                 if (f_ok) {
                     return;
                 }
                 f_ok = true;
                 var userid = $(this).data('userid');
                 var number = $(this).data('number');
+                var pageslug = $(this).data('pageslug');
+
                 if (userid == 0) {
                     $.toast({
                         heading: '通知',
@@ -458,7 +461,7 @@
                     return 0;
                 }
 
-                Card_to_Point(arry_cards);
+                Card_to_Point(arry_cards, pageslug);
             });
 
             // Call the closeModal function on the clicks/keyboard
@@ -470,11 +473,11 @@
             });
         });
 
-        function Card_to_Point(card_ids) {
-            async_Request2(card_ids);
+        function Card_to_Point(card_ids, pageslug) {
+            async_Request2(card_ids, pageslug);
         }
 
-        function async_Request2(card_ids) {
+        function async_Request2(card_ids, pageslug) {
             $(".lds-spinner").show();
 
             var data = {
@@ -494,7 +497,6 @@
                 success: function (response) {
                     // Handle the response
                     var result = response.data['result'];
-                    console.log(result);
 
                     $(".lds-spinner").hide();   //hide the spinner
 
@@ -502,8 +504,8 @@
 
                     if (result == 'success') {
                         $.toast({
-                            heading: 'コイン替え成功',
-                            text: number + '枚のカードをコインに替えました。',
+                            heading: 'ポイント替え成功',
+                            text: number + '枚のカードをポイントに替えました。',
                             icon: 'success',
                             loader: true,
                             loaderBg: '#fff',
@@ -535,7 +537,12 @@
                         return;
                     }
 
-                    var url = "https://t-card.shop/my-account/cards_list/";
+                    var url = "https://t-card.shop/";
+                    if (pageslug == 'card-list') {
+                        url += 'card-list';
+                    } else {
+                        url += 'my-account/cards_list/';
+                    }
                     window.location.href = url;
                 },
                 error: function (response) {
@@ -543,7 +550,7 @@
                     closeModal();   //close the modal
                     // alert('サーバーとの通信中にエラーが発生しました。もう一度お試しください。');
                     $.toast({
-                        heading: 'コイン替え失敗',
+                        heading: 'ポイント替え失敗',
                         text: 'サーバーとの通信中にエラーが発生しました。申し訳ありませんが、もう一度お試しください。',
                         icon: 'error',
                         loader: true,
@@ -570,12 +577,13 @@
             $(this).parent().parent().parent().find('.input-wrapper .card-id').prop('checked', true);
 
             var arry_cards = get_selected_cards();
-            console.log(arry_cards);
 
             var number = arry_cards.length;
             var userid = $(this).data('userid');
+            var pageslug = $(this).data('pageslug');
+            var postid = $(this).data('postid');
 
-            show_modal(number, userid, arry_cards);
+            show_modal(number, userid, arry_cards, pageslug, postid);
         });
 
         $('.btn-card-sending').off('click').on('click', function () {   //商品を発送する
@@ -584,15 +592,16 @@
             }
 
             var arry_cards = get_selected_cards();
-            console.log(arry_cards);
 
             var number = arry_cards.length;
             var userid = $(this).data('userid');
+            var pageslug = $(this).data('pageslug');
+            var postid = $(this).data('postid');
 
-            show_modal(number, userid, arry_cards);
+            show_modal(number, userid, arry_cards, pageslug, postid);
         });
 
-        function show_modal(number, userid, arry_cards) {
+        function show_modal(number, userid, arry_cards, pageslug, postid) {
             if (number == 0) {
                 $.toast({
                     heading: '通知',
@@ -619,7 +628,7 @@
                 '<div class="notice-title">カード発送</div>' +
                 '<p class="description">選択した保有カードを発送致します。<br>よろしいですか？<br>発送の手続きをお願いします。</p>' +
                 '<div class="btns">' +
-                '<button class="btn-sending btn-item" data-userid="' + userid + '" data-number="' + number + '">カードを発送する</button>' +
+                '<button class="btn-sending btn-item" data-userid="' + userid + '" data-number="' + number + '" data-pageslug="' + pageslug + '" data-postid="' + postid + '">カードを発送する</button>' +
                 '<button class="btn-cancel btn-item">キャンセル</button>' +
                 '</div>' +
                 '</div>';
@@ -634,13 +643,14 @@
 
             $('.btn-sending').off('click').on('click', function () {
                 // closeModal();
-                console.log(f_ok);
                 if (f_ok) {
                     return;
                 }
                 f_ok = true;
                 var userid = $(this).data('userid');
                 var number = $(this).data('number');
+                var pageslug = $(this).data('pageslug');
+                var postid = $(this).data('postid');
                 if (userid == 0) {
                     $.toast({
                         heading: '通知',
@@ -660,7 +670,7 @@
                     return 0;
                 }
 
-                jump_SendingPage(arry_cards, number);
+                jump_SendingPage(arry_cards, number, pageslug, postid);
             });
 
             // Call the closeModal function on the clicks/keyboard
@@ -672,8 +682,8 @@
             });
         }
 
-        function jump_SendingPage(arry_cards, number) {
-            var url = "https://t-card.shop/card-sending/?ncards=" + number + "&card_ids=";
+        function jump_SendingPage(arry_cards, number, pageslug, postid) {
+            var url = "https://t-card.shop/card-sending/?pageslug=" + pageslug + "&postid=" + postid + "&ncards=" + number + "&card_ids=";
             $.each(arry_cards, function (index, value) {
                 // Code to be executed for each array item
                 if (index < number - 1) {
@@ -687,15 +697,14 @@
 
         ///////////////////////////////2024.02.12 dron417///////////////////////////////////
         $('.submit-btn').click(function () { //送信する button of card-sending page
+            var pageslug = getUrlParam('pageslug');
             var cardIds = getUrlParam('card_ids');
             var array_cardIDs = cardIds.split("-");
 
-            console.log(array_cardIDs);
-
-            async_delete_cards(array_cardIDs);
+            async_delete_cards(array_cardIDs, pageslug);
         })
 
-        function async_delete_cards(cardIds) {
+        function async_delete_cards(cardIds, pageslug) {
             $(".lds-spinner").show();
 
             var data = {
@@ -712,7 +721,6 @@
                 success: function (response) {
                     // Handle the response
                     var result = response.data['result'];
-                    console.log(result);
 
                     $(".lds-spinner").hide(); //hide the spinner
 
@@ -735,7 +743,12 @@
                         return;
                     }
 
-                    var url = "https://t-card.shop/my-account/cards_list/";
+                    var url = "https://t-card.shop/";
+                    if (pageslug == 'card-list') {
+                        url += 'card-list';
+                    } else {
+                        url += 'my-account/cards_list/';
+                    }
                     window.location.href = url;
                 },
                 error: function (response) {
@@ -766,12 +779,20 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
 
-        $('.btn-oripa').click(function() {
+        $('.btn-oripa').click(function () {
             if (f_ok) {
                 return;
             }
 
-            window.location.href="https://t-card.shop/oripa/";
+            window.location.href = "https://t-card.shop/";
+        })
+
+        $('.btn-store-card').click(function () {
+            if (f_ok) {
+                return;
+            }
+
+            window.location.href = "https://t-card.shop/my-account/cards_list";
         })
 
         ////////////////////////////////////////////////////////////////////////////

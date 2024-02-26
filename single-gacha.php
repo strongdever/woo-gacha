@@ -13,14 +13,14 @@
         <section class="top-image">
             <img class="theme-image pc" src="<?php echo $theme_image_pc; ?>">
             <img class="theme-image sp" src="<?php echo $theme_image_sp; ?>">
-            <a class="btn-action btn-oripa" href="<?php echo HOME . 'oripa'; ?>">
+            <a class="btn-action btn-oripa" href="<?php echo HOME; ?>">
                 <span>ガチャ一覧</span>
             </a>
             <div class="btns-wrapper">
                 <div class="progress">
                     <div class="price-wrapper">
                         <img src="">
-                        必要コイン数 : <span class="coin-number"><?php echo $gacha_price; ?></span> PT
+                        必要ポイント数 : <span class="coin-number"><?php echo $gacha_price; ?></span> PT
                     </div>
                     <div class="gacha-number">
                         残 <span class="current-number"><?php echo $current_nCard; ?></span> / <span class="total-number"><?php echo $total_ncard; ?></span>

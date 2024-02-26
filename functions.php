@@ -21,6 +21,18 @@ function my_theme_enqueue_styles()
     wp_enqueue_style('child-style', get_stylesheet_uri());
 }
 
+// WooCommerceのボタンデザイン変更
+function wp_enqueue_woocommerce_style(){
+	//独自スタイルシートの登録
+	wp_register_style( 'woocommerce-original-style', get_stylesheet_directory_uri() . '/assets/css/woocommerce.css' );
+	//クラスの存在チェック
+	if ( class_exists( 'woocommerce' ) ) {
+		//読み込み
+		wp_enqueue_style( 'woocommerce-original-style' );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'wp_enqueue_woocommerce_style' );
+
 // カスタムjs読み込み
 function add_link_files()
 {
@@ -29,7 +41,7 @@ function add_link_files()
     if (is_page('contact')) {
         wp_enqueue_script('reload-contact', home_url() . '/wp-content/themes/astra-child/assets/js/script-contact.js', false, true);
     }
-    if (is_home() || is_front_page()) {
+    if (is_page('toreka')) {
         wp_enqueue_script('reload-content-height', home_url() . '/wp-content/themes/astra-child/assets/js/script-content-height.js', false, true);
     }
 
@@ -37,7 +49,7 @@ function add_link_files()
     $current_url = $_SERVER['REQUEST_URI'];
 
     global $post;
-    if (is_front_page() || (is_home() && is_page()) || is_page('oripa') || is_page('card-list') || strpos($current_url, 'cards_list') !== false || ($post->post_type == "gacha" && is_single())) { // oripa page
+    if (is_front_page() || (is_home() && is_page()) || is_page('toreka') || is_page('card-list') || strpos($current_url, 'cards_list') !== false || ($post->post_type == "gacha" && is_single())) { // oripa page
         wp_enqueue_style('c-oripa', home_url() . '/wp-content/themes/astra-child/assets/css/oripa.css', [], '1.0', 'all');
     }
     if (is_page('card-sending') || is_page('thanks')) { // oripa page
@@ -45,7 +57,7 @@ function add_link_files()
         // wp_enqueue_script('ajax-script', home_url() . '/wp-content/themes/astra-child/oripa-card-sending.php', array('jquery'), '1.0', true);  //oripa page
         // wp_localize_script('ajax-script', 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php'))); //oripa page
     }
-    if (is_page('oripa') || is_page('card-list') || is_page('card-sending') || strpos($current_url, 'cards_list') !== false || ($post->post_type == "gacha" && is_single())) { // oripa page
+    if (is_front_page() || is_page('card-list') || is_page('card-sending') || strpos($current_url, 'cards_list') !== false || ($post->post_type == "gacha" && is_single())) { // oripa page
         wp_enqueue_script('s-jquery', home_url() . '/wp-content/themes/astra-child/assets/js/jquery.min.js', [], '1.0', false); //oripa page
         wp_enqueue_script('s-oripa', home_url() . '/wp-content/themes/astra-child/assets/js/oripa.js', true, false);  //oripa page
 
@@ -200,10 +212,14 @@ function toreka_button_shortcode($atts)
     $home_url = home_url();
     // スラッグとホームURLを組み合わせてリンクを生成
     $link = $home_url . '/' . $slug;
-    $button_html = '<div class="toreka-button link-btn">';
-    $button_html .= '<img src="' . $home_url . '/wp-content/uploads/btn-skyblue.png" alt="">';
-    $button_html .= '<a href="' . esc_url($link) . '">' . esc_html($atts['text']);
-    $button_html .= '</a></div>';
+    // $button_html = '<div class="toreka-button link-btn">';
+    // $button_html .= '<img src="' . $home_url . '/wp-content/uploads/btn-skyblue.png" alt="">';
+    // $button_html .= '<a href="' . esc_url($link) . '">' . esc_html($atts['text']);
+    // $button_html .= '</a></div>';
+
+    $button_html = '
+            <a class="button" href="' . esc_url($link) . '">' . esc_html($atts['text']) . '</a>
+    ';
 
     return $button_html;
 }
@@ -228,7 +244,7 @@ function shop_button_shortcode($atts)
     $home_url = home_url();
     $button_html =
         '<div class="shop-button link-btn"><img src="' . $home_url . '/wp-content/uploads/btn-orange.png" alt="">';
-    $button_html .= '<a href="' . $home_url . '">';
+    $button_html .= '<a href="' . $home_url . '/toreka">';
     $button_html .= esc_html($atts['text']);
     $button_html .= '</a></div>';
 
@@ -458,11 +474,11 @@ function point_purchase_shortcode($atts)
         $output = '
         <div class="point-purchase point-block-container">
             <div class="purchase-img">
-                <img src="https://t-card.shop/wp-content/uploads/point-icon.png">
+                <img src="https://t-card.shop/wp-content/uploads/point-header-icon.png">
             </div>
             <div class="purchase-rate">
-                <p>' . esc_html($atts['point_num']) . ' point</p>
-                <p>' . esc_html($normal_price) . '円で購入</p>
+                <p>' . esc_html(number_format($atts['point_num'])) . ' pt</p>
+                <p>' . esc_html(number_format($normal_price)) . '円で購入</p>
             </div>
             <div class="purchase-button">
                 <a href="' . esc_url(add_query_arg('add-to-cart', $product_id, 'https://t-card.shop/product-category/point/')) . '">購入する</a>
@@ -631,20 +647,9 @@ function astra_woo_shop_parent_category() {
     endif;
 }
 
-// マイページにポイント購入追加
-// add_action( 'init', 'point_purchase_menu_add' );
-function point_purchase_menu_add() {
-    add_rewrite_endpoint( 'point_purchase_menu', EP_PAGES );
-}
-
-// add_filter( 'woocommerce_account_menu_items', 'point_purchase_menu_add_menu_item' );
-function point_purchase_menu_add_menu_item( $items ) {
-    $items['point_purchase_menu'] = 'ポイント購入';
-    return $items;
-}
-
-// add_action( 'woocommerce_account_point_purchase_menu_endpoint', 'point_purchase_menu_add_menu' );
-function point_purchase_menu_add_menu() {
+// ポイント購入メニュー
+function point_purchase_link()
+{
     global $wpdb;
 
     // 現在ログイン中のユーザーのIDを取得
@@ -661,29 +666,142 @@ function point_purchase_menu_add_menu() {
 
     // クエリを実行し、結果を取得
     $result = $wpdb->get_var($query);
+    $point = number_format($result, 0);
 
-    ?>
-    <div class="page-container">
-        <div class="point-page-container repeat-bg repeat-bg-putchase">
-            <div class="point-page">
-                <?php if (is_user_logged_in()) { ?>
-                <div class="point-purchase-title point-block-container">
-                    <p>ポイント購入</p>
-                    <div class="point-balance">
-                        <p>所持ポイント</p>
-                        <p><?php echo $result; ?> point</p>
-                    </div>
-                </div>
-                <?php echo do_shortcode('[point_purchase point_num="500"]'); ?>
-                <?php echo do_shortcode('[point_purchase point_num="1000"]'); ?>
-                <?php echo do_shortcode('[point_purchase point_num="5000"]'); ?>
-                <?php } else { ?>
-                <p>ログインをしてください。</p>
-                <?php } ?>
-            </div>
+    $uploads_baseurl = wp_upload_dir()['baseurl']; 
+    $point_page = esc_url( home_url( '/point-purchase/' ) );
+
+    $point_link = '
+        <div class="point-link-container">
+            <img class="point-header-icon" src ="' . $uploads_baseurl . '/point-header-icon.png" width="80px" height="90px">
+            <p class="current-point">' . $point .' pt</p>
+            <a class="point-link" href="' . $point_page . '"><img src="' . $uploads_baseurl . '/point-link.png" width="30px" height="30px"></a>
         </div>
-    </div>
-    <?php
+    ';
+
+    return $point_link;
 }
+
+add_shortcode('point-link', 'point_purchase_link');
+
+// ポイント購入時のテキスト変更
+function mycred_woo_payout_rewards( $order_id ) {
+	 
+    // Get Order
+    $order    = wc_get_order( $order_id );
+
+    global $woocommerce;
+
+    // if we want to stop the rewarding system
+    $proceed = apply_filters( 'mycred_before_woo_payout_reward', true, $order);
+
+    if( $proceed == false )
+        return;
+    
+    $paid_with = ( version_compare( $woocommerce->version, '3.0', '>=' ) ) ? $order->get_payment_method() : $order->payment_method;
+    $buyer_id  = ( version_compare( $woocommerce->version, '3.0', '>=' ) ) ? $order->get_user_id() : $order->user_id;
+
+    // If we paid with myCRED we do not award points by default
+    if ( $paid_with == 'mycred' && apply_filters( 'mycred_woo_reward_mycred_payment', false, $order ) === false )
+        return;
+
+    // Get items
+    $items    = $order->get_items();
+    $types    = mycred_get_types();
+
+    // Loop through each point type
+    foreach ( $types as $point_type => $point_type_label ) {
+
+        // Load type
+        $mycred = mycred( $point_type );
+
+        // Check for exclusions
+        if ( $mycred->exclude_user( $buyer_id ) ) continue;
+
+        // Calculate reward
+        $payout = $mycred->zero();
+        foreach ( $items as $item ) {
+
+            // Get the product ID or the variation ID
+            $product_id    = absint( $item['product_id'] );
+            $variation_id  = absint( $item['variation_id'] );
+            $reward_amount = mycred_get_woo_product_reward( $product_id, $variation_id, $point_type );
+
+            // Reward can not be empty or zero
+            if ( $reward_amount != '' && $reward_amount != 0 )
+                $payout = ( $payout + ( $mycred->number( $reward_amount ) * $item['qty'] ) );
+
+        }
+
+        // We can not payout zero points
+        if ( $payout === $mycred->zero() ) continue;
+
+        // Let others play with the reference and log entry
+        $reference = apply_filters( 'mycred_woo_reward_reference', '報酬', $order_id, $point_type );
+        $log       = apply_filters( 'mycred_woo_reward_log',       '%plural%購入', $order_id, $point_type );
+
+        // Make sure we only get points once per order
+        if ( ! $mycred->has_entry( $reference, $order_id, $buyer_id ) ) {
+
+            // Execute
+            $mycred->add_creds(
+                $reference,
+                $buyer_id,
+                $payout,
+                $log,
+                $order_id,
+                array( 'ref_type' => 'post' ),
+                $point_type
+            );
+
+        }
+
+    }
+
+}
+
+//管理画面以外で指定したバージョンのjQueryを呼び出す
+function load_script(){
+	if (!is_admin()){
+		wp_deregister_script('jquery');
+		wp_enqueue_script('jquery', '//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js', array());
+	}
+}
+add_action('wp_enqueue_scripts', 'load_script');
+
+// 背景画像のプリロード
+function add_custom_preload_image() {
+    if (is_page('toreka')) {
+        $upload_dir = wp_upload_dir();
+        $file_name = 'toreka-bg.png';
+        echo '<link rel="preload" as="image" href="' . esc_url($upload_dir['baseurl'] . '/' . $file_name) . '"/>';
+        echo '<link rel="preload" as="image" href="' . esc_url($upload_dir['baseurl'] . '/2023/12/top_fv_sp.png') . '"/>';
+    }
+}
+add_action('wp_head', 'add_custom_preload_image');
+
+// ログインユーザーのみ適用するcss
+function custom_css_for_logged_in_user() {
+    $current_user = wp_get_current_user();
+    if (is_user_logged_in()) {
+        echo '<style>';
+        echo '@media (max-width: 1080px) {';
+        echo '.site-header-section>div:last-child {';
+        echo 'display: none;';
+        echo '}';
+        echo '}';
+        echo '</style>';
+    }
+}
+
+// wp_headアクションに関数を追加してCSSを挿入
+add_action('wp_head', 'custom_css_for_logged_in_user');
+
+// CSSキャッシュの強制クリア
+function my_update_styles( $styles ) {
+    $mtime = filemtime( get_stylesheet_directory() . '/style.css' );
+    $styles->default_version = $mtime;
+  }
+  add_action( 'wp_default_styles', 'my_update_styles' );
 
 require_once get_stylesheet_directory() . '/oripa-functions.php';  //oripa page
