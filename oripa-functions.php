@@ -358,9 +358,15 @@ function handle_ajax_request3()
   // Retrieve the data
   $data = $_POST['my_data'];
   $card_ids = $data['card_ids'];
+  $formData = $data['formData'];
+
+  //proccessing of sending mail
+  $result = SendingMail($card_ids, $formData);  //return the coin of the winning cards
 
   //prcessing the store the coin of the winning cards
-  $result = Delete_SendingCards($card_ids);  //return the coin of the winning cards
+  if ($result == 'success') {
+    $result = Delete_SendingCards($card_ids);  //return the coin of the winning cards
+  }
 
   $response = array(
     'result' => $result,
@@ -373,7 +379,7 @@ add_action('wp_ajax_my_ajax_action3', 'handle_ajax_request3');
 
 function Delete_SendingCards($card_ids)
 {
-  $func_result = '';
+  $func_result = 'success';
   if (is_user_logged_in()) {
     global $mywpdb;
     $mywpdb = new wpdb('tglobal', 'V-dF4pjMsBf_', 'tglobal_ec', 'mysql57.tglobal.sakura.ne.jp');
@@ -529,6 +535,187 @@ function Deduction_Coin($post_id, $number)
   return $result;
 }
 
+function SendingMail($card_ids, $formData)
+{
+  $func_result = 'success';
+
+  if (is_user_logged_in()) {
+    global $mywpdb;
+    $mywpdb = new wpdb('tglobal', 'V-dF4pjMsBf_', 'tglobal_ec', 'mysql57.tglobal.sakura.ne.jp');
+    $table_name = 'wp1567b2winning_cards';
+
+    $card_ids_string = "'" . implode("','", $card_ids) . "'";
+
+    $query = "SELECT card_title, card_price, post_id FROM $table_name WHERE card_id IN ($card_ids_string)";
+    $results = $mywpdb->get_results($query);
+    $cards_list = $results;
+    $ncard = count($results);
+
+    mb_language("Japanese");
+    mb_internal_encoding("UTF-8");
+
+    //------------------sending to the users start---------------->
+    $to = $formData[0][9];
+    $subject = "カード発送";
+    $message = $formData[0][0] . $formData[0][1] . 'さん
+    
+    ご当選おめでとうございます。
+    
+    T-Cardオリパをご利用いただきありがとうございます。
+    下記のカードの発送を受け承りました。
+    
+    商品の発送までしばらくお待ちください。\r\n
+    
+    
+    【お届け先情報】
+    
+    国または地域 : ' . $formData[0][2] . '
+    郵便番号 : ' . $formData[0][3] . '
+    都道府県 : ' . $formData[0][4] . '
+    市区町村 : ' . $formData[0][5] . '
+    番地 : ' . $formData[0][6] . $formData[0][7] . '
+    お名前 : ' . $formData[0][0] . $formData[0][1] . '
+    連絡先 : ' . $formData[0][8] . '
+    メール : ' . $formData[0][9];
+    if (count($formData) > 1) {
+      $message .= '
+      
+
+      別の住所
+      
+      国または地域 : ' . $formData[1][2] . '
+      郵便番号 : ' . $formData[1][3] . '
+      都道府県 : ' . $formData[1][4] . '
+      市区町村 : ' . $formData[1][5] . '
+      番地 : ' . $formData[1][6] . $formData[1][7] . '
+      お名前 : ' . $formData[1][0] . $formData[1][1] . '
+      連絡先 : ' . $formData[1][8] . '
+      メール : ' . $formData[1][9];
+    }
+
+    $message .= '
+
+
+    【お届けするカード情報】
+
+    発送するカード: ' . $ncard . '
+    
+    ';
+    foreach ($results as $result) {
+      $message .= $result->card_title . '             ' . $result->card_price . 'pt
+    ';
+    }
+
+
+    '----------------------------------
+    またのご利用をお待ちしています。
+    https://t-card.shop/
+
+
+    事業者の名称および連絡先
+    会社名：T-Global株式会社
+    担当者：兼田　拓也
+    本社住所：〒494-0008
+    愛知県一宮市東五城字備前23番地4
+    メールアドレス：contact@t-card.shop';
+
+    $headers = 'From: admin@t-card.shop' . "\r\n";
+    if (count($formData) > 1) {
+      $headers .= 'Bcc: ' . $formData[1][9];
+    }
+
+    mb_send_mail($to, $subject, $message, $headers);
+    //-----------------sending to the users end--------------------
+
+    //-----------------sending to the managers start-------------------->
+    $cards_array_result = [];
+    foreach ($cards_list as $card) {
+      $post_id = $card->post_id;
+
+      if (!isset($cards_array_result[$post_id])) {
+        $cards_array_result[$post_id] = [];
+      }
+
+      $cards_array_result[$post_id][] = [$card->card_title, $card->card_price];
+    }
+
+    sleep(0.5);
+    foreach ($cards_array_result as $post_id => $cards) {
+      $to = get_field('agency_email', $post_id);
+      $message = '管理担当者様
+      
+    お客様より発送の手続きが行われました。
+    下記の内容で発送の準備をお願い致します。
+
+
+
+    【お届け先情報】
+    
+    国または地域 : ' . $formData[0][2] . '
+    郵便番号 : ' . $formData[0][3] . '
+    都道府県 : ' . $formData[0][4] . '
+    市区町村 : ' . $formData[0][5] . '
+    番地 : ' . $formData[0][6] . $formData[0][7] . '
+    お名前 : ' . $formData[0][0] . $formData[0][1] . '
+    連絡先 : ' . $formData[0][8] . '
+    メール : ' . $formData[0][9];
+      if (count($formData) > 1) {
+        $message .= '
+      
+
+      別の住所
+      
+      国または地域 : ' . $formData[1][2] . '
+      郵便番号 : ' . $formData[1][3] . '
+      都道府県 : ' . $formData[1][4] . '
+      市区町村 : ' . $formData[1][5] . '
+      番地 : ' . $formData[1][6] . $formData[1][7] . '
+      お名前 : ' . $formData[1][0] . $formData[1][1] . '
+      連絡先 : ' . $formData[1][8] . '
+      メール : ' . $formData[1][9];
+      }
+
+      $message .= '
+
+
+    【お届けするカード情報】
+
+    発送するカード: ' . count($cards) . '
+    
+    ';
+      foreach ($cards as $card) {
+        $message .= $card[0] . '             ' . $card[1] . 'pt
+    ';
+      }
+
+
+      '----------------------------------
+    またのご利用をお待ちしています。
+    https://t-card.shop/
+
+
+    事業者の名称および連絡先
+    会社名：T-Global株式会社
+    担当者：兼田　拓也
+    本社住所：〒494-0008
+    愛知県一宮市東五城字備前23番地4
+    メールアドレス：contact@t-card.shop
+    ';
+
+      $headers = 'From: admin@t-card.shop' . "\r\n";
+      $headers .= 'Reply-To: ' . $formData[0][9];
+      mb_send_mail($to, $subject, $message, $headers);
+      sleep(0.5);
+    }
+    //-----------------sending to the managers end-------------------->
+    $func_result = 'success';
+  } else {
+    $func_result = 'ログインしてから実行してください';
+  }
+
+  return $func_result;
+}
+
 function Card_to_Point($card_ids)
 {
   $func_result = '';
@@ -549,17 +736,6 @@ function Card_to_Point($card_ids)
         $reward_price = $reward_price + $result->card_price;
       }
     }
-
-    // $results = $mywpdb->get_results(
-    //   $mywpdb->prepare("SELECT card_price FROM $table_name WHERE user_id = %d AND winning_update = %s", $userid, "new"),
-    //   ARRAY_A
-    // );  //get all the card_price of the new winning cards
-    // $ary_coins = wp_list_pluck($results, 'card_price');
-    // $ncard = count($ary_coins);
-
-    // foreach ($ary_coins as $coin) {
-    //   $reward_price = $reward_price + $coin;
-    // }
 
     $query = "DELETE FROM $table_name WHERE card_id IN ($card_ids_string)";
     $mywpdb->query($query);

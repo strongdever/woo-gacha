@@ -56,7 +56,137 @@ if (is_user_logged_in()) {
 <main id="gacha-card-sending">
     <div class="container main-form">
         <?php if (is_user_logged_in()) : ?>
-            <?php echo do_shortcode('[contact-form-7 id="0fd7de2" title="カード発送"]'); ?>
+            <div class="form-wrapper" id="myform">
+                <ul class="vertical-wrapper profile-info">
+                    <li class="horizontal-wrapper">
+                        <div class="vertical-wrapper input-item half-width">
+                            <label class="required" for="lastname">氏</label>
+                            <input type="text" name="lastname" id="lastname" class="input half-length" placeholder="例）鈴木">
+                            <div class="error-msg lastname-error">この項目は必須項目です。</div>
+                        </div>
+                        <div class="vertical-wrapper input-item half-width">
+                            <label class="required" for="firstname">名</label>
+                            <input type="text" name="firstname" id="firstname" class="input half-length" placeholder="例）太郎">
+                            <div class="error-msg firstname-error">この項目は必須項目です。</div>
+                        </div>
+                    </li>
+                    <li class="vertical-wrapper input-item">
+                        <label class="required" for="country">国または地域</label>
+                        <input type="text" name="country" id="country" class="input whole-length" placeholder="例）日本">
+                        <div class="error-msg country-error">この項目は必須項目です。</div>
+                    </li>
+                    <li class="horizontal-wrapper">
+                        <div class="vertical-wrapper input-item half-width">
+                            <label class="required" for="post-code">郵便番号</label>
+                            <input type="text" name="post-code" id="post-code" class="input half-length" placeholder="例）123-4567">
+                            <div class="error-msg post-code-error">この項目は必須項目です。</div>
+                        </div>
+                        <div class="vertical-wrapper input-item half-width">
+                            <label class="required" for="province">都道府県</label>
+                            <input type="text" name="province" id="province" class="input half-length" placeholder="例）東京都">
+                            <div class="error-msg province-error">この項目は必須項目です。</div>
+                        </div>
+                    </li>
+                    <li class="vertical-wrapper input-item">
+                        <label class="required" for="city">市区町村</label>
+                        <input type="text" name="city" id="city" class="input whole-length" placeholder="例）東五城字備前">
+                        <div class="error-msg city-error">この項目は必須項目です。</div>
+                    </li>
+                    <li class="vertical-wrapper input-item">
+                        <label class="required" for="street">番地</label>
+                        <input type="text" name="street" id="street" class="input whole-length" placeholder="例）23番地４">
+                        <div class="error-msg street-error">この項目は必須項目です。</div>
+                    </li>
+                    <li class="vertical-wrapper input-item">
+                        <input type="text" name="building-number" id="building-number" class="input whole-length" placeholder="アパート名、棟名、部屋番号など(オプション)">
+                        <!-- <div class="error-msg building-number-error">この項目は必須項目です。</div> -->
+                    </li>
+                    <li class="vertical-wrapper input-item">
+                        <label class="" for="phone">電話番号</label>
+                        <input type="text" name="phone" id="phone" class="input whole-length" placeholder="例）050-1742-3631">
+                        <!-- <div class="error-msg phone-error">この項目は必須項目です。</div> -->
+                    </li>
+                    <li class="vertical-wrapper input-item">
+                        <label class="required" for="email">メールアドレス</label>
+                        <input type="email" name="email" id="email" class="input whole-length" placeholder="例）mail@example.com">
+                        <div class="error-msg email-error">この項目は必須項目です。</div>
+                    </li>
+                </ul>
+
+                <div class="other-address-label">
+                    <input type="checkbox" id="other-addr" name="other-addr" class="other-addr">
+                    <label for="other-addr">別の住所へ配送しますか?</label>
+                </div>
+
+                <ul class="vertical-wrapper other-profile-info">
+                    <li class="horizontal-wrapper">
+                        <div class="vertical-wrapper input-item half-width">
+                            <label class="required" for="other-lastname">氏</label>
+                            <input type="text" name="other-lastname" id="other-lastname" class="input half-length" placeholder="例）鈴木">
+                            <div class="error-msg other-lastname-error">この項目は必須項目です。</div>
+                        </div>
+                        <div class="vertical-wrapper input-item half-width">
+                            <label class="required" for="other-firstname">名</label>
+                            <input type="text" name="other-firstname" id="other-firstname" class="input half-length" placeholder="例）太郎">
+                            <div class="error-msg other-firstname-error">この項目は必須項目です。</div>
+                        </div>
+                    </li>
+                    <li class="vertical-wrapper input-item">
+                        <label class="required" for="other-country">国または地域</label>
+                        <input type="text" name="other-country" id="other-country" class="input whole-length" placeholder="例）日本">
+                        <div class="error-msg other-country-error">この項目は必須項目です。</div>
+                    </li>
+                    <li class="horizontal-wrapper">
+                        <div class="vertical-wrapper input-item half-width">
+                            <label class="required" for="other-post-code">郵便番号</label>
+                            <input type="text" name="other-post-code" id="other-post-code" class="input half-length" placeholder="例）123-4567">
+                            <div class="error-msg other-post-code-error">この項目は必須項目です。</div>
+                        </div>
+                        <div class="vertical-wrapper input-item half-width">
+                            <label class="required" for="other-province">都道府県</label>
+                            <input type="text" name="other-province" id="other-province" class="input half-length" placeholder="例）東京都">
+                            <div class="error-msg other-province-error">この項目は必須項目です。</div>
+                        </div>
+                    </li>
+                    <li class="vertical-wrapper input-item">
+                        <label class="required" for="other-city">市区町村</label>
+                        <input type="text" name="other-city" id="other-city" class="input whole-length" placeholder="例）東五城字備前">
+                        <div class="error-msg other-city-error">この項目は必須項目です。</div>
+                    </li>
+                    <li class="vertical-wrapper input-item">
+                        <label class="required" for="other-street">番地</label>
+                        <input type="text" name="other-street" id="other-street" class="input whole-length" placeholder="例）23番地４">
+                        <div class="error-msg other-street-error">この項目は必須項目です。</div>
+                    </li>
+                    <li class="vertical-wrapper input-item">
+                        <input type="text" name="other-building-number" id="other-building-number" class="input whole-length" placeholder="アパート名、棟名、部屋番号など(オプション)">
+                        <!-- <div class="error-msg other-building-number">この項目は必須項目です。</div> -->
+                    <li class="vertical-wrapper input-item">
+                        <label class="" for="other-phone">電話番号</label>
+                        <input type="text" name="other-phone" id="other-phone" class="input whole-length" placeholder="例）050-1742-3631">
+                    </li>
+                    <li class="vertical-wrapper input-item">
+                        <label class="required" for="other-email">メールアドレス</label>
+                        <input type="email" name="other-email" id="other-email" class="input whole-length" placeholder="例）mail@example.com">
+                        <div class="error-msg other-email-error">この項目は必須項目です。</div>
+                    </li>
+                </ul>
+
+                <div class="card-list-wrapper">
+                    <div class="head-label">【お届けするカード情報】</div>
+                    <div class="ncard-wrapper">
+                    </div>
+                    <div class="card-list">
+                    </div>
+                </div>
+
+                <div class="horizontal-wrapper input-button">
+                    <div class="sending-btn-wrapper">
+                        <button id="submit-btn" class="btn submit-btn">送信する</button>
+                    </div>
+                    <a class="btn btn-cancel" href="https://t-card.shop/my-account/cards_list">キャンセルする（保有カードに戻ります）</a>
+                </div>
+            </div>
         <?php else : ?>
             <div class="no-items">この機能を利用するには、ログインする必要があります。</div>
         <?php endif; ?>
@@ -110,7 +240,7 @@ if (is_user_logged_in()) {
             $('.cards-info').css('height', 'auto');
             $('.cards-info').css('height', $('.cards-info').prop('scrollHeight') + 'px');
 
-            $('#other-addr input').change(function() {
+            $('#other-addr').change(function() {
                 if ($(this).is(':checked')) {
                     $('.other-profile-info').show();
                     $('.other-profile-info').css('display', 'flex');
@@ -130,7 +260,6 @@ if (is_user_logged_in()) {
                 var results = regex.exec(location.search);
                 return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
             }
-
 
         });
 

@@ -1510,10 +1510,6 @@ main {
 	font-size: 1.0rem;
 }
 
-#gacha-card-list.store-cards-list .options .btn-option.btn-card-sending {
-	display: none !important;
-}
-
 @media only screen and (max-width: 767px) {
 	#gacha-card-list .options .btn-option {
 		width: 100%;

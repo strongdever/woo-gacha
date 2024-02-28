@@ -381,7 +381,19 @@ main {
 }
 
 .main-form .other-address-label {
+	display: flex;
+    column-gap: 0.6rem;
+    align-items: center;
 	margin-right: auto;
+	margin-top: 2.4rem
+}
+
+.main-form .other-address-label input[type="checkbox"] {
+	display: flex;
+}
+
+.main-form .other-address-label label::before {
+	display: none;
 }
 
 .main-form .other-address-label label:hover {
@@ -394,10 +406,11 @@ main {
 
 .main-form .other-address-label label {
 	list-style: none;
-	margin-top: 0.8rem;
 	display: flex;
 	align-items: center;
 	column-gap: 0.4rem;
+	color: #333 !important;
+	padding-left: 0 !important;
 }
 
 .main-form .other-address-label input {
@@ -542,5 +555,16 @@ textarea::-webkit-input-placeholder {
 
 	100% {
 		opacity: 0;
+	}
+}
+
+.error-msg {
+	display: none;
+	color: #F24040;
+}
+
+@media only screen and (max-width: 767px) {
+	.error-msg {
+		font-size: 0.9rem;
 	}
 }

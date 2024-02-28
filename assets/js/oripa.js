@@ -201,9 +201,9 @@
                         '<video class="video-screen" autoplay>' +
                         '<source src="' + video_url + '" type="video/mp4">' +
                         '</video>' +
-                        '</div>' +
-                        '<a class="video-skip yellow-btn" href="https://t-card.shop/card-list/">スキップ</a>';
+                        '</div>';
                     $('body').append(video_content);
+                    $('body').append('<a class="video-skip yellow-btn" href="https://t-card.shop/card-list/">スキップ</a>');
                     $('.video-wrapper').css('opacity', 1);
                     var video = $(".video-screen")[0];
 
@@ -696,19 +696,195 @@
         }
 
         ///////////////////////////////2024.02.12 dron417///////////////////////////////////
-        $('.submit-btn').click(function () { //送信する button of card-sending page
+        $('.submit-btn').off('click').on('click', function () { //送信する button of card-sending page
             var pageslug = getUrlParam('pageslug');
             var cardIds = getUrlParam('card_ids');
             var array_cardIDs = cardIds.split("-");
 
-            async_delete_cards(array_cardIDs, pageslug);
+            var validation = funcValidationCheck();
+            console.log('result' + validation);
+
+            var formData = [];
+
+            formData = getFormData();
+
+            if (validation) {
+                async_delete_cards(array_cardIDs, pageslug, formData);
+            }
         })
 
-        function async_delete_cards(cardIds, pageslug) {
+        function getFormData() {
+            var formData = [];
+            formData[0] = [];
+            formData[1] = [];
+
+            formData[0][0] = ($('#lastname').val());
+            formData[0][1] = ($('#firstname').val());
+            formData[0][2] = ($('#country').val());
+            formData[0][3] = ($('#post-code').val());
+            formData[0][4] = ($('#province').val());
+            formData[0][5] = ($('#city').val());
+            formData[0][6] = ($('#street').val());
+            formData[0][7] = ($('#building-number').val());
+            formData[0][8] = ($('#phone').val());
+            formData[0][9] = ($('#email').val());
+
+            if ($('#other-addr').is(':checked')) {
+                formData[1][0] = ($('#other-lastname').val());
+                formData[1][1] = ($('#other-firstname').val());
+                formData[1][2] = ($('#other-country').val());
+                formData[1][3] = ($('#other-post-code').val());
+                formData[1][4] = ($('#other-province').val());
+                formData[1][5] = ($('#other-city').val());
+                formData[1][6] = ($('#other-street').val());
+                formData[1][7] = ($('#other-building-number').val());
+                formData[1][8] = ($('#other-phone').val());
+                formData[1][9] = ($('#other-email').val());
+            }
+
+            return formData;
+        }
+
+        function funcValidationCheck() {
+            var result = true;
+            if ($('#lastname').val() == '') {
+                $('.lastname-error').show();
+                $('#lastname').focus();
+                result = false;
+            } else {
+                $('.lastname-error').hide();
+            }
+
+            if ($('#firstname').val() == '') {
+                $('.firstname-error').show();
+                $('#lastname').focus();
+                result = false;
+            } else {
+                $('.firstname-error').hide();
+            }
+
+            if ($('#country').val() == '') {
+                $('.country-error').show();
+                $('#lastname').focus();
+                result = false;
+            } else {
+                $('.country-error').hide();
+            }
+
+            if ($('#post-code').val() == '') {
+                $('.post-code-error').show();
+                $('#post-code').focus();
+                result = false;
+            } else {
+                $('.post-code-error').hide();
+            }
+
+            if ($('#province').val() == '') {
+                $('.province-error').show();
+                $('#province').focus();
+                result = false;
+            } else {
+                $('.province-error').hide();
+            }
+
+            if ($('#city').val() == '') {
+                $('.city-error').show();
+                $('#city').focus();
+                result = false;
+            } else {
+                $('.city-error').hide();
+            }
+
+            if ($('#street').val() == '') {
+                $('.street-error').show();
+                $('#street').focus();
+                result = false;
+            } else {
+                $('.street-error').hide();
+            }
+
+            if ($('#email').val() == '') {
+                $('.email-error').show();
+                $('#email').focus();
+                result = false;
+            } else {
+                $('.email-error').hide();
+            }
+
+            if ($('#other-addr').is(':checked')) {
+                if ($('#other-lastname').val() == '') {
+                    $('.other-lastname-error').show();
+                    $('#other-lastname').focus();
+                    result = false;
+                } else {
+                    $('.other-lastname-error').hide();
+                }
+                if ($('#other-firstname').val() == '') {
+                    $('.other-firstname-error').show();
+                    $('#other-firstname').focus();
+                    result = false;
+                } else {
+                    $('.other-firstname-error').hide();
+                }
+
+                if ($('#other-country').val() == '') {
+                    $('.other-country-error').show();
+                    $('#other-country').focus();
+                    result = false;
+                } else {
+                    $('.other-country-error').hide();
+                }
+
+                if ($('#other-post-code').val() == '') {
+                    $('.other-post-code-error').show();
+                    $('#other-post-code').focus();
+                    result = false;
+                } else {
+                    $('.other-post-code-error').hide();
+                }
+
+                if ($('#other-province').val() == '') {
+                    $('.other-province-error').show();
+                    $('#other-province').focus();
+                    result = false;
+                } else {
+                    $('.other-province-error').hide();
+                }
+
+                if ($('#other-city').val() == '') {
+                    $('.other-city-error').show();
+                    $('#other-city').focus();
+                    result = false;
+                } else {
+                    $('.other-city-error').hide();
+                }
+
+                if ($('#other-street').val() == '') {
+                    $('.other-street-error').show();
+                    $('#other-street').focus();
+                    result = false;
+                } else {
+                    $('.other-street-error').hide();
+                }
+
+                if ($('#other-email').val() == '') {
+                    $('.other-email-error').show();
+                    $('#other-email').focus();
+                    result = false;
+                } else {
+                    $('.other-email-error').hide();
+                }
+            }
+
+            return result;
+        }
+
+        function async_delete_cards(cardIds, pageslug, formData) {
             $(".lds-spinner").show();
 
             var data = {
-                card_ids: cardIds
+                card_ids: cardIds,
+                formData: formData
             }
             // var json_data = JSON.stringify(data);
             $.ajax({
